@@ -9,6 +9,9 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.1/leaflet-dvf.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.1/css/dvf.min.css" />
 
@@ -181,6 +184,10 @@
                         <div class="tab-pane" id="Pie">
                             <div id="features" class="panel panel-primary">
                                 <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-5"><h4>Radius: </h4></div>
+                                        <input id="radius_toggle" type="checkbox" disabled checked data-toggle="toggle">
+                                        </div>
                                     <textarea id="txtPiechart" class="form-control" type="text" placeholder="Enter your data here line by line"></textarea>
                                     <div id="loadPie" style="visibility: hidden;"></div>
                                     <div id="messagesPie" style="color: red;"></div>
@@ -433,7 +440,16 @@
             $('#myInput').focus()
         })
 
-        var colors = ['#008080', '#A52A2A', '#0000FF', '#FF00FF', '#00FFFF', '#FFFF00', '#00FF00', '#808000', '#C0C0C0', '#FFEBCD', '#8A2BE2', '#FF0000', '#FFFFFF', '#DEB887', '#5F9EA0', '#7FFF00', '#D2691E', '#FF7F50', '#6495ED', '#DC143C', '#B8860B', '#A9A9A9', '#FF4500', '#006400', '#BDB76B', '#8B008B', '#FF8C00', '#E9967A', '#8FBC8F', '#FFD700', '#483D8B', '#2F4F4F', '#00CED1', '#33CC99', '#FF1493', '#66FF66', '#99CC99', '#DCDCDC', '#66FF33', '#FFFF66', '#99FF33', '#ADFF2F', '#FF69B4', '#CD5C5C', '#F0E68C', '#E6E6FA', '#800000', '#800080', '#000080', '#008000', '#999999', '#CCCCCC', '#330000', '#660000', '#990000', '#CC0000', '#FF0000', '#663333', '#993333', '#CC3333', '#FF3333', '#996666', '#CC6666', '#FF6666', '#CC9999', '#FF9999', '#FFCCCC', '#663300', '#996633', '#CC9966', '#FFCC99', '#CC6600', '#FF9933', '#FF9900', '#FF6600', '#FFCC00', '#FF3300', '#CC9900', '#CC3300', '#FFCC33', '#FF6633', '#996600', '#993300', '#FFCC66', '#FF9966', '#CC9933', '#CC6633', '#333300', '#666600', '#999900', '#CCCC00', '#666633', '#999933', '#CCCC33', '#FFFF33', '#999966', '#CCCC66', '#CCCC99', '#FFFF99', '#FFFFCC', '#336600', '#669933', '#99CC66', '#CCFF99', '#66CC00', '#66FF00', '#99FF00', '#33FF00', '#CCFF00', '#33CC00', '#99CC00', '#CCFF33', '#339900', '#669900', '#99FF66', '#CCFF66', '#66CC33', '#99CC33', '#003300', '#006600', '#009900', '#00CC00', '#336633', '#339933', '#33CC33', '#33FF33', '#669966', '#66CC66', '#99FF99', '#CCFFCC', '#339966', '#66CC99', '#99FFCC', '#00CC66', '#33FF99', '#00FF99', '#00FF66', '#00FFCC', '#00FF33', '#00CC99', '#00CC33', '#33FFCC', '#33FF66', '#009966', '#009933', '#66FFCC', '#66FF99', '#33CC99', '#33CC66', '#003333', '#006666', '#009999', '#00CCCC', '#336666', '#339999', '#33CCCC', '#33FFFF', '#669999', '#66CCCC', '#66FFFF', '#99CCCC', '#99FFFF', '#CCFFFF', '#003366', '#336699', '#6699CC', '#99CCFF', '#0066CC', '#3399FF', '#0066FF', '#0099FF', '#0033FF', '#00CCFF', '#0033CC', '#0099CC', '#3366FF', '#33CCFF', '#003399', '#006699', '#6699FF', '#66CCFF', '#3366CC', '#3399CC', '#000033', '#000066', '#000099', '#0000CC', '#333366', '#333399', '#3333CC', '#3333FF', '#666699', '#6666CC', '#6666FF', '#9999CC', '#9999FF', '#CCCCFF', '#330066', '#663399', '#9966CC', '#CC99FF', '#6600CC', '#9933FF', '#9900FF', '#6600FF', '#CC00FF', '#3300FF', '#9900CC', '#3300CC', '#CC33FF', '#6633FF', '#660099', '#330099', '#CC66FF', '#9966FF', '#9933CC', '#6633CC', '#330033', '#660066', '#990099', '#CC00CC', '#663366', '#993399', '#CC33CC', '#FF33FF', '#996699', '#CC66CC', '#FF66FF', '#CC99CC', '#FF99FF', '#FFCCFF', '#660033', '#993366', '#CC6699', '#FF99CC', '#CC0066', '#FF3399', '#FF0066', '#FF0099', '#FF0033', '#FF00CC', '#CC0033', '#CC0099', '#FF3366', '#FF33CC', '#990033', '#990066', '#FF6699', '#FF66CC', '#CC3366', '#CC3399'];
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        var colors = ['#FF0000', '#00CC33', '#0099FF', '#FFFF33', '#FFCC00', '#FF9933', '#990033', '#CC9999', '#993399', '#FF99FF', '#9900FF', '#9999FF', '#000099', '#006666', '#00FFFF', '#006600', '#996600', '#66FF00', '#99CC33', '#CCCC33', '#666600', '#CCCCCC'];
         var geo = new google.maps.Geocoder();
         var cities = [];
         var markersLayer = new L.LayerGroup();
@@ -543,6 +559,13 @@
             tbody.append(tb);
         }
 
+        //Change radius-toggle
+        $(function () {
+            $('#radius_toggle').change(function () {
+                redrawPieChart();
+            })
+        })
+
         function clearMap() {
             markersLayer.clearLayers();
             piechartLayer.clearLayers();
@@ -597,6 +620,7 @@
         function makePiechart() {
             var bounds = [];
             clearMap();
+            $('#radius_toggle').bootstrapToggle('enable');
 
             //Удаляем нераспознанные города из массива маркеров
             while (piechartarray.length != cities.length) {
@@ -622,8 +646,12 @@
             for (var i = piechartarray.length - 1; i >= 0; i--) {
                 var data = {};
                 var chartOptions = {};
-                var radius = 9 + 21 * (piechartarray[i].Total - min) / (max - min);
-                if (!radius) { radius = 15 }
+                if (radius_toggle.checked) {
+                    var radius = 9 + 21 * (piechartarray[i].Total - min) / (max - min);
+                    if (!radius) { radius = 15 }
+                }
+                else { radius = 18}
+                
 
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
@@ -650,7 +678,7 @@
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
                         str += "<tr>";
-                        str += "<td style=\"background-color:" + colors[j] + "\">" + alltxt[j] + "</td>";
+                        str += "<td style=\"font-weight: bold;  font-size: 130%; color:" + colors[j] + "\">" + alltxt[j] + "</td>";
                         str += "<td align=\"center\">" + piechartarray[i].Count[j] + "</td>";
                         str += "</tr>";
                     }
@@ -683,8 +711,11 @@
             for (var i = piechartarray.length - 1; i >= 0; i--) {
                 var data = {};
                 var chartOptions = {};
-                var radius = 9 + 21 * (piechartarray[i].Total - min) / (max - min);
-                if (!radius) { radius = 15 }
+                if (radius_toggle.checked) {
+                    var radius = 9 + 21 * (piechartarray[i].Total - min) / (max - min);
+                    if (!radius) { radius = 15 }
+                }
+                else { radius = 18 }
 
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
@@ -711,7 +742,7 @@
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
                         str += "<tr>";
-                        str += "<td style=\"background-color:" + colors[j] + "\">" + alltxt[j] + "</td>";
+                        str += "<td style=\"font-weight: bold;  font-size: 130%; color:" + colors[j] + "\">" + alltxt[j] + "</td>";
                         str += "<td align=\"center\">" + piechartarray[i].Count[j] + "</td>";
                         str += "</tr>";
                     }
