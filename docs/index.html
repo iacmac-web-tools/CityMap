@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -9,6 +9,8 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.1/leaflet-dvf.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.1/css/dvf.min.css" />
 
     <meta charset="utf-8" />
 
@@ -16,11 +18,9 @@
         /*#region LEFALET FULLSCREEN ENABLING */
 
         .fullscreen-icon {
-           
         }
 
         .leaflet-retina .fullscreen-icon {
-          
         }
         /* one selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */
         .leaflet-container:-webkit-full-screen {
@@ -68,14 +68,25 @@
             margin: 0px;
             padding: 0px;
         }
-        #load{
-            width:100%;
-            height:100%;
-            position:fixed;
-            z-index:9999;
-            background:url("http://centermed.pl/gif-load.gif") no-repeat;
+
+        #loadPin {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            z-index: 9999;
+            background: url("http://centermed.pl/gif-load.gif") no-repeat;
             margin: 50px;
         }
+
+        #loadPie {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            z-index: 9999;
+            background: url("http://centermed.pl/gif-load.gif") no-repeat;
+            margin: 50px;
+        }
+
         #sidebar {
             float: left;
             height: 100%;
@@ -108,7 +119,7 @@
             margin: 0px;
             padding: 0px;
             width: auto;
-            position: relative;
+            position: static;
         }
 
         .panel-footer {
@@ -119,13 +130,23 @@
 
         .panel-body {
             height: 100%;
+            position: absolute;
         }
 
         #txtCities {
-              max-height: 85%;
-              min-height: 20%;
-              height: 60%;
-              max-width: 205px;
+            max-height: 85%;
+            min-height: 20%;
+            height: 60%;
+            max-width: 205px;
+            min-width: 205px;
+        }
+
+        #txtPiechart {
+            max-height: 85%;
+            min-height: 20%;
+            height: 60%;
+            max-width: 205px;
+            min-width: 205px;
         }
     </style>
 
@@ -136,35 +157,55 @@
         <div id="sidebar">
             <div class="sidebar-wrapper">
                 <div class="container">
-                    <div id="features" class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Enter cities</h3>
-                        </div>
-                        <div class="panel-body">
-                            <textarea id="txtCities" class="form-control" type="text" placeholder="Enter cities here line by line"></textarea>
-                            <div id="load" style="visibility: hidden;"></div>
-                            <div id="messages" style="color: red;"></div>
+                    <ul class="nav nav-pills">
+                        <li class="active"><a href="#Pin" data-toggle="tab" style="border-radius: 0;">Markers</a></li>
+                        <li><a href="#Pie" data-toggle="tab" style="border-radius: 0;">Pie Chart</a></li>
+                    </ul>
+
+                    <div class="tab-content clearfix">
+                        <div class="tab-pane active" id="Pin">
+                            <div id="features" class="panel panel-primary">
+                                <div class="panel-body">
+                                    <textarea id="txtCities" class="form-control" type="text" placeholder="Enter cities here line by line"></textarea>
+                                    <div id="loadPin" style="visibility: hidden;"></div>
+                                    <div id="messagesPin" style="color: red;"></div>
+                                </div>
+
+                                <div class="panel-footer">
+                                    <button type="button" class="btn btn-primary" id="btnGetCoordinates" onclick="getCoordFromGoogle(document.getElementById('txtCities').value)">Pin Markers</button>
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#exampleModal">Show Table</button>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="panel-footer">
-                            <button type="button" class="btn btn-primary" id="btnGetCoordinates" onclick="getCoordFromGoogle(document.getElementById('txtCities').value)">Pin Markers</button>
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#exampleModal">Show Table</button>
+                        <div class="tab-pane" id="Pie">
+                            <div id="features" class="panel panel-primary">
+                                <div class="panel-body">
+                                    <textarea id="txtPiechart" class="form-control" type="text" placeholder="Enter your data here line by line"></textarea>
+                                    <div id="loadPie" style="visibility: hidden;"></div>
+                                    <div id="messagesPie" style="color: red;"></div>
+                                </div>
+
+                                <div class="panel-footer">
+                                    <button type="button" class="btn btn-primary" id="btnGetCoordinates" onclick="getDatafromTxt(document.getElementById('txtPiechart').value)">Pin PieChart</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <table class="table table-striped" id="citiesTable"></table>
-                            </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-striped" id="citiesTable"></table>
+                                </div>
 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -392,21 +433,30 @@
             $('#myInput').focus()
         })
 
+        var colors = ['#008080', '#A52A2A', '#0000FF', '#FF00FF', '#00FFFF', '#FFFF00', '#00FF00', '#808000', '#C0C0C0', '#FFEBCD', '#8A2BE2', '#FF0000', '#FFFFFF', '#DEB887', '#5F9EA0', '#7FFF00', '#D2691E', '#FF7F50', '#6495ED', '#DC143C', '#B8860B', '#A9A9A9', '#FF4500', '#006400', '#BDB76B', '#8B008B', '#FF8C00', '#E9967A', '#8FBC8F', '#FFD700', '#483D8B', '#2F4F4F', '#00CED1', '#33CC99', '#FF1493', '#66FF66', '#99CC99', '#DCDCDC', '#66FF33', '#FFFF66', '#99FF33', '#ADFF2F', '#FF69B4', '#CD5C5C', '#F0E68C', '#E6E6FA', '#800000', '#800080', '#000080', '#008000', '#999999', '#CCCCCC', '#330000', '#660000', '#990000', '#CC0000', '#FF0000', '#663333', '#993333', '#CC3333', '#FF3333', '#996666', '#CC6666', '#FF6666', '#CC9999', '#FF9999', '#FFCCCC', '#663300', '#996633', '#CC9966', '#FFCC99', '#CC6600', '#FF9933', '#FF9900', '#FF6600', '#FFCC00', '#FF3300', '#CC9900', '#CC3300', '#FFCC33', '#FF6633', '#996600', '#993300', '#FFCC66', '#FF9966', '#CC9933', '#CC6633', '#333300', '#666600', '#999900', '#CCCC00', '#666633', '#999933', '#CCCC33', '#FFFF33', '#999966', '#CCCC66', '#CCCC99', '#FFFF99', '#FFFFCC', '#336600', '#669933', '#99CC66', '#CCFF99', '#66CC00', '#66FF00', '#99FF00', '#33FF00', '#CCFF00', '#33CC00', '#99CC00', '#CCFF33', '#339900', '#669900', '#99FF66', '#CCFF66', '#66CC33', '#99CC33', '#003300', '#006600', '#009900', '#00CC00', '#336633', '#339933', '#33CC33', '#33FF33', '#669966', '#66CC66', '#99FF99', '#CCFFCC', '#339966', '#66CC99', '#99FFCC', '#00CC66', '#33FF99', '#00FF99', '#00FF66', '#00FFCC', '#00FF33', '#00CC99', '#00CC33', '#33FFCC', '#33FF66', '#009966', '#009933', '#66FFCC', '#66FF99', '#33CC99', '#33CC66', '#003333', '#006666', '#009999', '#00CCCC', '#336666', '#339999', '#33CCCC', '#33FFFF', '#669999', '#66CCCC', '#66FFFF', '#99CCCC', '#99FFFF', '#CCFFFF', '#003366', '#336699', '#6699CC', '#99CCFF', '#0066CC', '#3399FF', '#0066FF', '#0099FF', '#0033FF', '#00CCFF', '#0033CC', '#0099CC', '#3366FF', '#33CCFF', '#003399', '#006699', '#6699FF', '#66CCFF', '#3366CC', '#3399CC', '#000033', '#000066', '#000099', '#0000CC', '#333366', '#333399', '#3333CC', '#3333FF', '#666699', '#6666CC', '#6666FF', '#9999CC', '#9999FF', '#CCCCFF', '#330066', '#663399', '#9966CC', '#CC99FF', '#6600CC', '#9933FF', '#9900FF', '#6600FF', '#CC00FF', '#3300FF', '#9900CC', '#3300CC', '#CC33FF', '#6633FF', '#660099', '#330099', '#CC66FF', '#9966FF', '#9933CC', '#6633CC', '#330033', '#660066', '#990099', '#CC00CC', '#663366', '#993399', '#CC33CC', '#FF33FF', '#996699', '#CC66CC', '#FF66FF', '#CC99CC', '#FF99FF', '#FFCCFF', '#660033', '#993366', '#CC6699', '#FF99CC', '#CC0066', '#FF3399', '#FF0066', '#FF0099', '#FF0033', '#FF00CC', '#CC0033', '#CC0099', '#FF3366', '#FF33CC', '#990033', '#990066', '#FF6699', '#FF66CC', '#CC3366', '#CC3399'];
         var geo = new google.maps.Geocoder();
         var cities = [];
         var markersLayer = new L.LayerGroup();
         var nextAddress = 0;
         var delay = 100;
         var cities_list = [];
+        var piechartLayer = new L.PieChartDataLayer();
+        var piechartarray = [];
+        var alltxt = [];
+        var PieChart = false;
 
         // Links to map sources
-        var yandexMap = L.tileLayer('http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU', {subdomains: ['01', '02', '03', '04'],attribution: '<a http="yandex.ru" target="_blank">Яндекс</a>',
-    reuseTiles: true,    updateWhenIdle: false  });
+        var yandexMap = L.tileLayer('http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU', {
+            subdomains: ['01', '02', '03', '04'], attribution: '<a http="yandex.ru" target="_blank">Яндекс</a>',
+            reuseTiles: true, updateWhenIdle: false
+        });
         var osmMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; ' + '<a href="http://openstreetmap.org">OpenStreetMap</a>' + ' Contributors' });
-        var roadsMap = L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
-        var stamMap = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', {    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',    subdomains: 'abcd',    minZoom: 0,    maxZoom: 20,    ext: 'png'});
+        var roadsMap = L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', { attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' });
+        var stamMap = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', { attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>', subdomains: 'abcd', minZoom: 0, maxZoom: 20, ext: 'png' });
         var esriMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'});
+            attribution: 'Tiles &copy; Esri'
+        });
+        var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
 
 
         // Initialize map
@@ -420,18 +470,21 @@
             }
         });
         var baseMaps = {
-            "Yandex Map" : yandexMap,
+            "Yandex Map": yandexMap,
+            "Google Map": googleStreets,
             "Open Street Map": osmMap,
-            "Toner Map" : stamMap,
+            "Toner Map": stamMap,
             "RoadsMap": roadsMap,
-            "Esri Map" : esriMap
+            "Esri Map": esriMap
         };
+
 
         // Attach layers to map
         map.options.crs = L.CRS.EPSG3395;
         L.control.layers(baseMaps).addTo(map);
         markersLayer.addTo(map);
 
+        // Смена типа карты в правом верхнем углу
         map.on('baselayerchange', function (event) {
             if (event.name == "Yandex Map") {
                 map.options.crs = L.CRS.EPSG3395;
@@ -439,23 +492,30 @@
             else {
                 map.options.crs = L.CRS.EPSG3857;
             }
-            markersLayer.clearLayers();
-            cities.forEach(function (city) {
-                markersLayer.addLayer(L.marker([city.lat, city.lon]).bindPopup(city.fullname));
-            });
-       });
+            clearMap();
+            if (PieChart == false) {
+                cities.forEach(function (city) {
+                    markersLayer.addLayer(L.marker([city.lat, city.lon]).bindPopup(city.fullname));
+                });
+            }
+            else {
+                redrawPieChart();
+            }
+        });
 
         // Pin markers on map based on cities
         var updateMap = function () {
             var bounds = [];
-            markersLayer.clearLayers();
+            clearMap();
+
             cities.forEach(function (city) {
                 markersLayer.addLayer(L.marker([city.lat, city.lon]).bindPopup(city.fullname));
                 bounds.push([city.lat, city.lon]);
             });
+
             var group = new L.LatLngBounds(bounds);
             map.fitBounds(group);
-            
+
         };
 
         // Show cities coordinates on modal table
@@ -483,65 +543,262 @@
             tbody.append(tb);
         }
 
-
-      function getCoordFromGoogle(val) {
-        nextAddress = 0;
-        delay = 100;
-        cities = [];
-        cities_list = val.trim().split(/\r?\n/);
-        document.getElementById('load').style.visibility="visible";
-        document.getElementById("messages").innerHTML = '';
-        theNext();
-      }
-
-      function theNext() {
-        if (nextAddress < cities_list.length) {
-          setTimeout('getAddress("'+cities_list[nextAddress]+'",theNext)', delay);
-          nextAddress++;
-        } else {
-          // We're done. Show map bounds
-            if (cities.length != 0) {
-                updateMap();
-                fillTable();               
-            }
-            document.getElementById('load').style.visibility="hidden";
+        function clearMap() {
+            markersLayer.clearLayers();
+            piechartLayer.clearLayers();
         }
-      }
 
-
-            // ====== Geocoding ======
-      function getAddress(search, next) {
-        geo.geocode({address:search}, function (results,status)
-          { 
-            // If that was successful
-            if (status == google.maps.GeocoderStatus.OK) {
-                        var obj = {
-                            fullname: results[0].formatted_address,
-                            lat: Math.round(results[0].geometry.location.lat()*10000000)/10000000,
-                            lon: Math.round(results[0].geometry.location.lng()*10000000)/10000000
-                        };
-                        cities.push(obj);
+        function getDatafromTxt(val) {
+            PieChart = true;
+            document.getElementById('loadPie').style.visibility = "visible";
+            nextAddress = 0;
+            delay = 100;
+            cities = [];
+            alltxt = [];
+            piechartarray = [];
+            var records_list = val.trim().split(/\r?\n/);
+            var current_data = [];
+            for (var i = 0; i < records_list.length; i++) {
+                current_data[i] = {
+                    city: records_list[i].trim().split(/\t/)[0],
+                    txt: records_list[i].trim().split(/\t/)[1],
+                    val: records_list[i].trim().split(/\t/)[2]
+                }
             }
-            // ====== Decode the error status ======
+            var countarray = [];
+            for (var i = 0; i < records_list.length; i++) {
+                if (alltxt.indexOf(current_data[i].txt) == -1) {
+                    alltxt.push(current_data[i].txt);
+                    countarray.push(0);
+                }
+            }
+            for (var i = 0; i < records_list.length; i++) {
+                if (piechartarray.map(x => x.City).indexOf(current_data[i].city) == -1) {
+                    piechartarray.push({
+                        City: current_data[i].city,
+                        fullname: '',
+                        Latitude: 0,
+                        Longitude: 0,
+                        Count: countarray.slice(),
+                        Total: parseFloat(current_data[i].val),
+                    });
+                }
+                else {
+                    piechartarray[piechartarray.map(x => x.City).indexOf(current_data[i].city)].Total += parseFloat(current_data[i].val);
+                }
+            }
+            for (var i = 0; i < current_data.length; i++) {
+                piechartarray[piechartarray.map(x => x.City).indexOf(current_data[i].city)].Count[alltxt.indexOf(current_data[i].txt)] = current_data[i].val;
+            }
+            document.getElementById("messagesPie").innerHTML = '';
+            theNext();
+        }
+
+        function makePiechart() {
+            var bounds = [];
+            clearMap();
+
+            //Удаляем нераспознанные города из массива маркеров
+            while (piechartarray.length != cities.length) {
+                for (var i = 0; i < piechartarray.length; i++) {
+                    if (cities.map(x => x.txtName).indexOf(piechartarray[i].City) == -1) {
+                        piechartarray.splice(i, 1);
+                    }
+                }
+            }
+
+            //Заносим в массив маркеров значения широты и долготы
+            for (var i = 0; i < cities.length; i++) {
+                var x = piechartarray.map(x => x.City).indexOf(cities[i].txtName);
+                piechartarray[x].Latitude = cities[i].lat;
+                piechartarray[x].Longitude = cities[i].lon;
+                piechartarray[x].fullname = cities[i].fullname;
+                bounds.push([cities[i].lat, cities[i].lon]);
+            }
+
+            var max = Math.max.apply(Math, piechartarray.map(function (o) { return o.Total; }));
+            var min = Math.min.apply(Math, piechartarray.map(function (o) { return o.Total; }));
+
+            for (var i = piechartarray.length - 1; i >= 0; i--) {
+                var data = {};
+                var chartOptions = {};
+                var radius = 9 + 21 * (piechartarray[i].Total - min) / (max - min);
+                if (!radius) { radius = 15 }
+
+                for (var j = 0; j < alltxt.length; j++) {
+                    if (piechartarray[i].Count[j] != 0) {
+                        data[alltxt[j].trim()] = piechartarray[i].Count[j] / piechartarray[i].Total,
+                        chartOptions[alltxt[j].trim()] = {
+                            fillColor: colors[j],
+                            color: colors[j],
+                            minHeight: 500,
+                            displayText: function (value) {
+                                return (value * 100).toFixed(1).toString() + '%';
+                            }
+                        }
+                    }
+                }
+                var options = {
+                    radius: radius,
+                    fillOpacity: 1,
+                    data: data,
+                    chartOptions: chartOptions,
+                }
+
+                var bchMarker = new L.PieChartMarker(new L.LatLng(piechartarray[i].Latitude, piechartarray[i].Longitude), options);
+                var str = "<h3>" + piechartarray[i].fullname + "</h3><table class=\"table table-bordered\"><tr style=\"font-weight:bold; color:white;\"><th style=\"background-color: #337ab7\">Item</th><th style=\"background-color: #337ab7\">Count</th></tr>";
+                for (var j = 0; j < alltxt.length; j++) {
+                    if (piechartarray[i].Count[j] != 0) {
+                        str += "<tr>";
+                        str += "<td style=\"background-color:" + colors[j] + "\">" + alltxt[j] + "</td>";
+                        str += "<td align=\"center\">" + piechartarray[i].Count[j] + "</td>";
+                        str += "</tr>";
+                    }
+                }
+                str += "</table>";
+                bchMarker.bindPopup(str, {
+                    minWidth: 300,
+                    maxWidth: 300
+                });
+                bchMarker.addTo(piechartLayer);
+            }
+
+            //Добавляем итоговый слой PieChart маркеров на карту
+            map.addLayer(piechartLayer);
+
+            //Фокусируемся на входящих маркерах
+            if (piechartarray.length != 0) {
+                var group = new L.LatLngBounds(bounds);
+                map.fitBounds(group);
+            }
+
+        }
+
+        function redrawPieChart() {
+            clearMap();
+
+            var max = Math.max.apply(Math, piechartarray.map(function (o) { return o.Total; }));
+            var min = Math.min.apply(Math, piechartarray.map(function (o) { return o.Total; }));
+
+            for (var i = piechartarray.length - 1; i >= 0; i--) {
+                var data = {};
+                var chartOptions = {};
+                var radius = 9 + 21 * (piechartarray[i].Total - min) / (max - min);
+                if (!radius) { radius = 15 }
+
+                for (var j = 0; j < alltxt.length; j++) {
+                    if (piechartarray[i].Count[j] != 0) {
+                        data[alltxt[j].trim()] = piechartarray[i].Count[j] / piechartarray[i].Total,
+                        chartOptions[alltxt[j].trim()] = {
+                            fillColor: colors[j],
+                            color: colors[j],
+                            minHeight: 500,
+                            displayText: function (value) {
+                                return (value * 100).toFixed(1).toString() + '%';
+                            }
+                        }
+                    }
+                }
+                var options = {
+                    radius: radius,
+                    fillOpacity: 1,
+                    data: data,
+                    chartOptions: chartOptions,
+                }
+
+                var bchMarker = new L.PieChartMarker(new L.LatLng(piechartarray[i].Latitude, piechartarray[i].Longitude), options);
+                var str = "<h3>" + piechartarray[i].fullname + "</h3><table class=\"table table-bordered\"><tr style=\"font-weight:bold; color:white;\"><th style=\"background-color: #337ab7\">Item</th><th style=\"background-color: #337ab7\">Count</th></tr>";
+                for (var j = 0; j < alltxt.length; j++) {
+                    if (piechartarray[i].Count[j] != 0) {
+                        str += "<tr>";
+                        str += "<td style=\"background-color:" + colors[j] + "\">" + alltxt[j] + "</td>";
+                        str += "<td align=\"center\">" + piechartarray[i].Count[j] + "</td>";
+                        str += "</tr>";
+                    }
+                }
+                str += "</table>";
+                bchMarker.bindPopup(str, {
+                    minWidth: 300,
+                    maxWidth: 300
+                });
+                bchMarker.addTo(piechartLayer);
+            }
+
+            //Добавляем итоговый слой PieChart маркеров на карту
+            map.addLayer(piechartLayer);
+        }
+
+        // ====== Geocoding ======
+        function getCoordFromGoogle(val) {
+            PieChart = false;
+            nextAddress = 0;
+            delay = 100;
+            cities = [];
+            cities_list = val.trim().split(/\r?\n/);
+            document.getElementById('loadPin').style.visibility = "visible";
+            document.getElementById("messagesPin").innerHTML = '';
+            theNext();
+        }
+
+        function theNext() {
+            if (PieChart == false) {
+                if (nextAddress < cities_list.length) {
+                    setTimeout('getAddress("' + cities_list[nextAddress] + '",theNext)', delay);
+                    nextAddress++;
+                } else {
+                    // We're done. Show map bounds
+                    if (cities.length != 0) {
+                        updateMap();
+                        fillTable();
+                    }
+                    document.getElementById('loadPin').style.visibility = "hidden";
+                }
+            }
             else {
-              // === if we were sending the requests to fast, try this one again and increase the delay
-              if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-                nextAddress--;
-                delay++;
-              } else {
-                var reason="Code "+status;
-                var msg = 'error = "' + search + '"<br>';
-                document.getElementById("messages").innerHTML += msg;
-              }   
+                if (nextAddress < piechartarray.length) {
+                    setTimeout('getAddress("' + piechartarray[nextAddress].City + '",theNext)', delay);
+                    nextAddress++;
+                } else {
+                    // We're done. Show map bounds
+                    if (cities.length != 0) {
+                        makePiechart();
+                    }
+                    document.getElementById('loadPie').style.visibility = "hidden";
+                }
             }
-            next();
-          }
-        );
-      }
+
+        }
+
+        function getAddress(search, next) {
+            geo.geocode({ address: search }, function (results, status) {
+                // If that was successful
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var obj = {
+                        txtName: search,
+                        fullname: results[0].formatted_address,
+                        lat: Math.round(results[0].geometry.location.lat() * 10000000) / 10000000,
+                        lon: Math.round(results[0].geometry.location.lng() * 10000000) / 10000000
+                    };
+                    cities.push(obj);
+                }
+                    // ====== Decode the error status ======
+                else {
+                    // === if we were sending the requests to fast, try this one again and increase the delay
+                    if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                        nextAddress--;
+                        delay++;
+                    } else {
+                        var reason = "Code " + status;
+                        var msg = 'error = "' + search + '"<br>';
+                        if (PieChart == false) { document.getElementById("messagesPin").innerHTML += msg; }
+                        else { document.getElementById("messagesPie").innerHTML += msg; }
+                    }
+                }
+                next();
+            }
+            );
+        }
     </script>
 
-    <script>
-
-    </script>
 </body>
 </html>
