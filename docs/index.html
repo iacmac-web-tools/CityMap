@@ -61,7 +61,6 @@
 
         /*#endregion */
 
-
         /*#region LEAFLET FILL PAGE AND SIDEBAR */
 
         html, body, #container {
@@ -116,6 +115,33 @@
         }
 
         /*#endregion */
+
+        /*#region LEGEND */
+        ul {
+    margin: 20px;
+     list-style-type: none;
+}
+
+.input-color {
+    position: relative;
+}
+.input-color input {
+    padding-left: 20px;
+}
+.input-color .color-box {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    background-color: #ccc;
+    position: absolute;
+    left: 5px;
+    top: 9px;
+}
+ /*#endregion */
+
+ .table>tbody>tr>td {
+     vertical-align: middle;
+ }
 
         #features, .container, .panel {
             height: 100%;
@@ -231,7 +257,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                        <div id="legend" class="span3" style="margin-left: 20%;"></div>
+                                        <div id="legend" style="margin-left: 20%;"></div>
                                 </div>
                         </div>
                     </div>
@@ -691,7 +717,6 @@
                         chartOptions[alltxt[j].trim()] = {
                             fillColor: colors[j],
                             color: '#000000',
-                            minHeight: 500,
                             displayText: function (value) {
                                 return (value * 100).toFixed(1).toString() + '%';
                             }
@@ -711,15 +736,14 @@
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
                         str += "<tr>";
-                        str += "<td style=\"font-weight: bold;  font-size: 120%; color:" + colors[j] + "\">" + alltxt[j] + "</td>";
-                        str += "<td align=\"center\">" + piechartarray[i].Count[j] + "</td>";
+                        str += "<td style=\"font-weight: bold; padding-top:2px;\"><div class=\"data-layer-legend\"><div class=\"legend-box\" style=\"background-color:" + colors[j] + ";border-color:#000000;\"></div><div class=\"key\" style=\"font-size: 12pt; font-family: Helvetica ; \">" + alltxt[j] + "</div></div></td>";
+                        str += "<td>" + piechartarray[i].Count[j] + "</td>";
                         str += "</tr>";
                     }
                 }
                 str += "</table>";
                 bchMarker.bindPopup(str, {
-                    minWidth: 300,
-                    maxWidth: 300
+                    minWidth: 400
                 });
                 bchMarker.addTo(piechartLayer);
             }
@@ -728,19 +752,26 @@
             map.addLayer(piechartLayer);
 
             //Добавляем данные для отображения легенды
-            var piechartOptions = {};
-            for (var j = 0; j < alltxt.length; j++) {
-                piechartOptions[alltxt[j].trim()] = {
-                    fillColor: colors[j],
-                    color: colors[j],
-                    minHeight: 500
-                }
-            }
-            piechartLayer.options.chartOptions = piechartOptions;
+            //var piechartOptions = {};
+            //for (var j = 0; j < alltxt.length; j++) {
+            //    piechartOptions[alltxt[j].trim()] = {
+            //        fillColor: colors[j],
+            //        color: colors[j],
+            //        minHeight: 500
+            //    }
+            //}
+            //piechartLayer.options.chartOptions = piechartOptions;
+
             $('#legend').html('');
-            $('#legend').append(piechartLayer.getLegend({
-                className: 'well'
-            }));
+            var str = "<ul>";
+            for (var j = 0; j < alltxt.length; j++) {
+                str += "<li><div class=\"input-color\"><input type=\"text\" value=\"" + alltxt[j] + "\" /><div class=\"color-box\" style=\"background-color:" + colors[j] + ";\"></div></div></li>";
+            }
+            str += "</ul>";
+            $('#legend').html(str);
+            //$('#legend').append(piechartLayer.getLegend({
+            //    className: 'well'
+            //}));
             
 
             //Фокусируемся на входящих маркерах
@@ -772,7 +803,6 @@
                         chartOptions[alltxt[j].trim()] = {
                             fillColor: colors[j],
                             color: '#000000',
-                            minHeight: 500,
                             displayText: function (value) {
                                 return (value * 100).toFixed(1).toString() + '%';
                             }
@@ -791,15 +821,14 @@
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
                         str += "<tr>";
-                        str += "<td style=\"font-weight: bold;  font-size: 120%; color:" + colors[j] + "\">" + alltxt[j] + "</td>";
-                        str += "<td align=\"center\">" + piechartarray[i].Count[j] + "</td>";
+                        str += "<td style=\"font-weight: bold; padding-top:2px;\"><div class=\"data-layer-legend\"><div class=\"legend-box\" style=\"background-color:" + colors[j] + ";border-color:#000000;\"></div><div class=\"key\" style=\"font-size: 12pt; font-family: Helvetica ; \">" + alltxt[j] + "</div></div></td>";
+                        str += "<td>" + piechartarray[i].Count[j] + "</td>";
                         str += "</tr>";
                     }
                 }
                 str += "</table>";
                 bchMarker.bindPopup(str, {
-                    minWidth: 300,
-                    maxWidth: 350
+                    minWidth: 400
                 });
                 bchMarker.addTo(piechartLayer);
             }
