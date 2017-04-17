@@ -151,9 +151,12 @@
             max-width: 205px;
             min-width: 205px;
         }
+        #legend {
+            width: 60%;
+        }
     </style>
 
-    <title>IACMAC: CityMap</title>
+    <title>IACMAC: CityMap ver.1.1.2</title>
 </head>
 <body>
     <div id="container">
@@ -176,7 +179,7 @@
 
                                 <div class="panel-footer">
                                     <button type="button" class="btn btn-primary" id="btnGetCoordinates" onclick="getCoordFromGoogle(document.getElementById('txtCities').value)">Pin Markers</button>
-                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#exampleModal">Show Table</button>
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#citiesCoordModal">Show Table</button>
                                 </div>
                             </div>
                         </div>
@@ -195,12 +198,13 @@
 
                                 <div class="panel-footer">
                                     <button type="button" class="btn btn-primary" id="btnGetCoordinates" onclick="getDatafromTxt(document.getElementById('txtPiechart').value)">Pin PieChart</button>
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#legendModal">Legend</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="citiesCoordModal" tabindex="-1" role="dialog" aria-labelledby="citiesCoordModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -213,6 +217,22 @@
                                 </div>
 
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    </div>
+                    <div class="modal fade" id="legendModal" tabindex="0" role="dialog" aria-labelledby="legendModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                        <div id="legend" class="span3" style="margin-left: 20%;"></div>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -436,9 +456,14 @@
         // Initialise elements on page
 
         // Enabling button Show table
-        $('#myModal').on('shown.bs.modal', function () {
+        $('#citiesCoordModal').on('shown.bs.modal', function () {
             $('#myInput').focus()
         })
+        // Enabling button Show legend
+        $('#legendModal').on('shown.bs.modal', function () {
+            $('#myInput').focus()
+        })
+
 
         function getRandomColor() {
             var letters = '0123456789ABCDEF';
@@ -572,49 +597,56 @@
         }
 
         function getDatafromTxt(val) {
-            PieChart = true;
-            document.getElementById('loadPie').style.visibility = "visible";
-            nextAddress = 0;
-            delay = 100;
-            cities = [];
-            alltxt = [];
-            piechartarray = [];
-            var records_list = val.trim().split(/\r?\n/);
-            var current_data = [];
-            for (var i = 0; i < records_list.length; i++) {
-                current_data[i] = {
-                    city: records_list[i].trim().split(/\t/)[0],
-                    txt: records_list[i].trim().split(/\t/)[1],
-                    val: records_list[i].trim().split(/\t/)[2]
+            if (val != '') {
+                PieChart = true;
+                document.getElementById('loadPie').style.visibility = "visible";
+                nextAddress = 0;
+                delay = 100;
+                cities = [];
+                alltxt = [];
+                piechartarray = [];
+                var records_list = val.trim().split(/\r?\n/);
+                var current_data = [];
+                for (var i = 0; i < records_list.length; i++) {
+                    current_data[i] = {
+                        city: records_list[i].trim().split(/\t/)[0],
+                        txt: records_list[i].trim().split(/\t/)[1],
+                        val: records_list[i].trim().split(/\t/)[2]
+                    }
                 }
-            }
-            var countarray = [];
-            for (var i = 0; i < records_list.length; i++) {
-                if (alltxt.indexOf(current_data[i].txt) == -1) {
-                    alltxt.push(current_data[i].txt);
-                    countarray.push(0);
+                var countarray = [];
+                for (var i = 0; i < records_list.length; i++) {
+                    if (alltxt.indexOf(current_data[i].txt) == -1) {
+                        alltxt.push(current_data[i].txt);
+                        countarray.push(0);
+                    }
                 }
-            }
-            for (var i = 0; i < records_list.length; i++) {
-                if (piechartarray.map(x => x.City).indexOf(current_data[i].city) == -1) {
-                    piechartarray.push({
-                        City: current_data[i].city,
-                        fullname: '',
-                        Latitude: 0,
-                        Longitude: 0,
-                        Count: countarray.slice(),
-                        Total: parseFloat(current_data[i].val),
-                    });
+                while (alltxt.length > colors.length) {
+                    colors.push(getRandomColor());
                 }
-                else {
-                    piechartarray[piechartarray.map(x => x.City).indexOf(current_data[i].city)].Total += parseFloat(current_data[i].val);
+
+                for (var i = 0; i < records_list.length; i++) {
+                    if (piechartarray.map(x => x.City).indexOf(current_data[i].city) == -1) {
+                        piechartarray.push({
+                            City: current_data[i].city,
+                            fullname: '',
+                            Latitude: 0,
+                            Longitude: 0,
+                            Count: countarray.slice(),
+                            Total: parseFloat(current_data[i].val),
+                        });
+                    }
+                    else {
+                        piechartarray[piechartarray.map(x => x.City).indexOf(current_data[i].city)].Total += parseFloat(current_data[i].val);
+                    }
                 }
+                for (var i = 0; i < current_data.length; i++) {
+                    piechartarray[piechartarray.map(x => x.City).indexOf(current_data[i].city)].Count[alltxt.indexOf(current_data[i].txt)] = current_data[i].val;
+                }
+                document.getElementById("messagesPie").innerHTML = '';
+                theNext();
             }
-            for (var i = 0; i < current_data.length; i++) {
-                piechartarray[piechartarray.map(x => x.City).indexOf(current_data[i].city)].Count[alltxt.indexOf(current_data[i].txt)] = current_data[i].val;
-            }
-            document.getElementById("messagesPie").innerHTML = '';
-            theNext();
+            else { document.getElementById("messagesPie").innerHTML = 'Empty string!'; }
         }
 
         function makePiechart() {
@@ -650,7 +682,7 @@
                     var radius = 9 + 21 * (piechartarray[i].Total - min) / (max - min);
                     if (!radius) { radius = 15 }
                 }
-                else { radius = 18}
+                else { radius = 16}
                 
 
                 for (var j = 0; j < alltxt.length; j++) {
@@ -658,7 +690,7 @@
                         data[alltxt[j].trim()] = piechartarray[i].Count[j] / piechartarray[i].Total,
                         chartOptions[alltxt[j].trim()] = {
                             fillColor: colors[j],
-                            color: colors[j],
+                            color: '#000000',
                             minHeight: 500,
                             displayText: function (value) {
                                 return (value * 100).toFixed(1).toString() + '%';
@@ -673,12 +705,13 @@
                     chartOptions: chartOptions,
                 }
 
+
                 var bchMarker = new L.PieChartMarker(new L.LatLng(piechartarray[i].Latitude, piechartarray[i].Longitude), options);
                 var str = "<h3>" + piechartarray[i].fullname + "</h3><table class=\"table table-bordered\"><tr style=\"font-weight:bold; color:white;\"><th style=\"background-color: #337ab7\">Item</th><th style=\"background-color: #337ab7\">Count</th></tr>";
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
                         str += "<tr>";
-                        str += "<td style=\"font-weight: bold;  font-size: 130%; color:" + colors[j] + "\">" + alltxt[j] + "</td>";
+                        str += "<td style=\"font-weight: bold;  font-size: 120%; color:" + colors[j] + "\">" + alltxt[j] + "</td>";
                         str += "<td align=\"center\">" + piechartarray[i].Count[j] + "</td>";
                         str += "</tr>";
                     }
@@ -693,6 +726,22 @@
 
             //Добавляем итоговый слой PieChart маркеров на карту
             map.addLayer(piechartLayer);
+
+            //Добавляем данные для отображения легенды
+            var piechartOptions = {};
+            for (var j = 0; j < alltxt.length; j++) {
+                piechartOptions[alltxt[j].trim()] = {
+                    fillColor: colors[j],
+                    color: colors[j],
+                    minHeight: 500
+                }
+            }
+            piechartLayer.options.chartOptions = piechartOptions;
+            $('#legend').html('');
+            $('#legend').append(piechartLayer.getLegend({
+                className: 'well'
+            }));
+            
 
             //Фокусируемся на входящих маркерах
             if (piechartarray.length != 0) {
@@ -715,14 +764,14 @@
                     var radius = 9 + 21 * (piechartarray[i].Total - min) / (max - min);
                     if (!radius) { radius = 15 }
                 }
-                else { radius = 18 }
+                else { radius = 16 }
 
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
                         data[alltxt[j].trim()] = piechartarray[i].Count[j] / piechartarray[i].Total,
                         chartOptions[alltxt[j].trim()] = {
                             fillColor: colors[j],
-                            color: colors[j],
+                            color: '#000000',
                             minHeight: 500,
                             displayText: function (value) {
                                 return (value * 100).toFixed(1).toString() + '%';
@@ -742,7 +791,7 @@
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
                         str += "<tr>";
-                        str += "<td style=\"font-weight: bold;  font-size: 130%; color:" + colors[j] + "\">" + alltxt[j] + "</td>";
+                        str += "<td style=\"font-weight: bold;  font-size: 120%; color:" + colors[j] + "\">" + alltxt[j] + "</td>";
                         str += "<td align=\"center\">" + piechartarray[i].Count[j] + "</td>";
                         str += "</tr>";
                     }
@@ -750,7 +799,7 @@
                 str += "</table>";
                 bchMarker.bindPopup(str, {
                     minWidth: 300,
-                    maxWidth: 300
+                    maxWidth: 350
                 });
                 bchMarker.addTo(piechartLayer);
             }
@@ -759,16 +808,44 @@
             map.addLayer(piechartLayer);
         }
 
+        // Show legend in modal window
+        var fillLegend = function () {
+            document.getElementById("legendTable").innerHTML = "";
+            var tbody = $('#legendTable');
+            var props = ["fullname", "lat", "lon"];
+            // Write table head
+            var th = $('<thead>');
+            var tr = $('<tr>');
+            $('<th>').html('City').appendTo(tr);
+            $('<th>').html('Latitude').appendTo(tr);
+            $('<th>').html('Longitude').appendTo(tr);
+            th.append(tr);
+            tbody.append(th);
+            //Write table data
+            var tb = $('<tbody>');
+            $.each(cities, function (i, city) {
+                var tr = $('<tr>');
+                $.each(props, function (i, prop) {
+                    $('<td>').html(city[prop]).appendTo(tr);
+                });
+                tb.append(tr);
+            });
+            tbody.append(tb);
+        }
+
         // ====== Geocoding ======
         function getCoordFromGoogle(val) {
-            PieChart = false;
-            nextAddress = 0;
-            delay = 100;
-            cities = [];
-            cities_list = val.trim().split(/\r?\n/);
-            document.getElementById('loadPin').style.visibility = "visible";
-            document.getElementById("messagesPin").innerHTML = '';
-            theNext();
+            if (val != '') {
+                PieChart = false;
+                nextAddress = 0;
+                delay = 100;
+                cities = [];
+                cities_list = val.trim().split(/\r?\n/);
+                document.getElementById('loadPin').style.visibility = "visible";
+                document.getElementById("messagesPin").innerHTML = '';
+                theNext();
+            }
+            else { document.getElementById("messagesPin").innerHTML = 'Empty string!'; }
         }
 
         function theNext() {
