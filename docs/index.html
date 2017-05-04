@@ -187,13 +187,40 @@
         #ex1Slider .slider-selection {
             background: #BABABA;
         }
+
         #ex1Slider {
             width: 185px;
             margin-left: 8%;
         }
+
+        .legend {
+            line-height: 18px;
+            color: #555;
+        }
+
+            .legend i {
+                width: 16px;
+                height: 16px;
+                float: left;
+                margin-right: 8px;
+            }
+
+        .info {
+            padding: 6px 8px;
+            font: 16px Helvetica;
+            background: white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+
+            .info h4 {
+                margin: 0 0 5px;
+                color: #777;
+            }
+
     </style>
 
-    <title>IACMAC: CityMap ver.1.1.5</title>
+    <title>IACMAC: CityMap ver.1.1.6</title>
 </head>
 <body>
     <div id="container">
@@ -237,8 +264,9 @@
                                 </div>
 
                                 <div class="panel-footer">
-                                    <button type="button" class="btn btn-primary" id="btnGetCoordinates" onclick="getDatafromTxt(document.getElementById('txtPiechart').value)">Pin PieChart</button>
+                                    <button type="button" class="btn btn-primary" id="btnGetCoordinates" onclick="getDatafromTxt(document.getElementById('txtPiechart').value)">PieChart</button>
                                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#legendModal">Legend</button>
+                                    <button type="button" id="btnShowLegendOnMap" class="btn btn-default" disabled onclick="ShowLegendOnMap()">>></button>
                                 </div>
                             </div>
                         </div>
@@ -262,16 +290,12 @@
 
                     <!-- Modal -->
                 </div>
-                <div class="modal fade" id="legendModal" tabindex="0" role="dialog" aria-labelledby="legendModalLabel" aria-hidden="true">
+                <div class="modal fade" id="legendModal" role="dialog" aria-labelledby="legendModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div id="legend"></div>
+                                    <div id="legend"></div>
+
                             </div>
                         </div>
                     </div>
@@ -532,18 +556,16 @@
         var piechartarray = [];
         var alltxt = [];
         var PieChart = false;
+        var Legend = L.control({ position: 'bottomright' });
 
         // Links to map sources
         var yandexMap = L.tileLayer('http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU', {
-            subdomains: ['01', '02', '03', '04'], attribution: '<a http="yandex.ru" target="_blank">Яндекс</a>',
-            reuseTiles: true, updateWhenIdle: false
+            subdomains: ['01', '02', '03', '04'], reuseTiles: true, updateWhenIdle: false
         });
-        var osmMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; ' + '<a href="http://openstreetmap.org">OpenStreetMap</a>' + ' Contributors' });
-        var roadsMap = L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', { attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' });
-        var stamMap = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', { attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>', subdomains: 'abcd', minZoom: 0, maxZoom: 20, ext: 'png' });
-        var esriMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri'
-        });
+        var osmMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        var roadsMap = L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}');
+        var stamMap = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', { subdomains: 'abcd', minZoom: 0, maxZoom: 20, ext: 'png' });
+        var esriMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}');
         var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
 
 
@@ -654,6 +676,11 @@
             piechartLayer.clearLayers();
         }
 
+        function ShowLegendOnMap() {
+            if (Legend.getPosition() == 'bottomright') { Legend.setPosition('none') }
+            else { Legend.setPosition('bottomright') }
+        }
+
         function getDatafromTxt(val) {
             if (val != '') {
                 PieChart = true;
@@ -712,6 +739,7 @@
             clearMap();
             $('#radius_toggle').bootstrapToggle('enable');
             $("#radius_slider").slider("enable");
+            document.getElementById("btnShowLegendOnMap").disabled = false;
 
             //Удаляем нераспознанные города из массива маркеров
             while (piechartarray.length != cities.length) {
@@ -783,16 +811,40 @@
             //Добавляем итоговый слой PieChart маркеров на карту
             map.addLayer(piechartLayer);
 
-            //Добавляем данные для отображения легенды
+            //Добавляем легенду на ShowModal
             $('#legend').html('');
-            var str = "<ul>";
+            //var str = "<ul>";
+            //for (var j = 0; j < alltxt.length; j++) {
+            //    var sum = 0;
+            //    for (var i = 0; i < piechartarray.length; i++) { sum += parseInt(piechartarray[i].Count[j]); }
+            //    str += "<li><div class=\"input-color\"><input type=\"text\" style = \"width: 70%;\" value=\"" + alltxt[j] + "\t(N = " + sum + ")\" /><div class=\"color-box\" style=\"background-color:" + colors[j] + ";\"></div></div></li>";
+            //}
+            //str += "</ul>";
+            var str = "<div style=\"box-shadow:none;\" class=\"info legend leaflet-control\">";
             for (var j = 0; j < alltxt.length; j++) {
                 var sum = 0;
                 for (var i = 0; i < piechartarray.length; i++) { sum += parseInt(piechartarray[i].Count[j]); }
-                str += "<li><div class=\"input-color\"><input type=\"text\" style = \"width: 70%;\" value=\"" + alltxt[j] + "\t(N = " + sum + ")\" /><div class=\"color-box\" style=\"background-color:" + colors[j] + ";\"></div></div></li>";
+                str += "<i style=\"background:" + colors[j] + "\"></i>" + alltxt[j] + "\t(N = " + sum +  ")<br>";
             }
-            str += "</ul>";
+            str += "</div>";
             $('#legend').html(str);
+
+
+
+
+            //Добавляем легенду на карту
+            map.removeControl(Legend);
+            Legend.onAdd = function (map) {
+                var div = L.DomUtil.create('div', 'info legend');
+
+                for (var i = 0; i < alltxt.length; i++) {
+                    var sum = 0;
+                    for (var j = 0; j < piechartarray.length; j++) { sum += parseInt(piechartarray[j].Count[i]); }
+                    div.innerHTML += '<i style="background:' + colors[i] + '"></i> ' + alltxt[i] + "\t(N = " + sum + ")<br>";
+                }
+                return div;
+            };
+            Legend.addTo(map);
 
 
             //Фокусируемся на входящих маркерах
