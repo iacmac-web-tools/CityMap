@@ -18,6 +18,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.1/leaflet-dvf.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.1/css/dvf.min.css" />
 
+    <script type="text/javascript" src="RFregions.js"></script>
+
     <meta charset="utf-8" />
 
     <style>
@@ -84,6 +86,15 @@
         }
 
         #loadPie {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            z-index: 9999;
+            background: url("http://centermed.pl/gif-load.gif") no-repeat;
+            margin: 50px;
+        }
+
+        #loadShape {
             width: 100%;
             height: 100%;
             position: fixed;
@@ -184,6 +195,14 @@
             min-width: 205px;
         }
 
+       #txtShape {
+            max-height: 85%;
+            min-height: 20%;
+            height: 60%;
+            max-width: 205px;
+            min-width: 205px;
+        }
+
         #ex1Slider .slider-selection {
             background: #BABABA;
         }
@@ -205,6 +224,19 @@
                 margin-right: 8px;
             }
 
+        .legendShape {
+            line-height: 18px;
+            color: #555;
+        }
+        .legendShape i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+
+
         .info {
             padding: 6px 8px;
             font: 16px Helvetica;
@@ -220,7 +252,7 @@
 
     </style>
 
-    <title>IACMAC: CityMap ver.1.1.6</title>
+    <title>CityMap ver.1.3.0</title>
 </head>
 <body>
     <div id="container">
@@ -228,8 +260,9 @@
             <div class="sidebar-wrapper">
                 <div class="container">
                     <ul class="nav nav-pills">
-                        <li class="active"><a href="#Pin" data-toggle="tab" style="border-radius: 0;">Markers</a></li>
-                        <li><a href="#Pie" data-toggle="tab" style="border-radius: 0;">Pie Chart</a></li>
+                        <li class="active"><a href="#Pin" data-toggle="tab" style="border-radius: 0;">Pin</a></li>
+                        <li><a href="#Pie" data-toggle="tab" style="border-radius: 0;">Pie</a></li>
+                        <li><a href="#Shape" data-toggle="tab" style="border-radius: 0;">Shape</a></li>
                     </ul>
 
                     <div class="tab-content clearfix">
@@ -270,7 +303,24 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="tab-pane" id="Shape">
+                            <div id="features" class="panel panel-primary">
+                                <div class="panel-body">
+                                    <textarea id="txtShape" class="form-control" type="text" placeholder="Enter regions value here line by line"></textarea>
+                                    <div id="loadShape" style="visibility: hidden;"></div>
+                                    <div id="messagesShape" style="color: red;"></div>
+                                </div>
+
+                                <div class="panel-footer">
+                                    <button type="button" class="btn btn-primary" id="btnShowShape" onclick="getDatafromShapeTxt(document.getElementById('txtShape').value)">Show regions</button>
+                                    <button type="button" class="btn btn-default" id="btnShowDensity" onclick="showDensity()">Density</button>
+                                    <a href="RFregions.xlsx" download="Example"><img src="icon_xls.gif"></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <!-- Modal -->
                     <div class="modal fade" id="citiesCoordModal" tabindex="-1" role="dialog" aria-labelledby="citiesCoordModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -556,7 +606,11 @@
         var piechartarray = [];
         var alltxt = [];
         var PieChart = false;
+        var geojson = new L.geoJson();
         var Legend = L.control({ position: 'bottomright' });
+        var legendShape = L.control({ position: 'bottomright' });
+        var nodataflag = false;
+        var grades = [0, 10, 20, 50, 100, 200, 500, 1000];
 
         // Links to map sources
         var yandexMap = L.tileLayer('http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU', {
@@ -908,6 +962,186 @@
 
             //Добавляем итоговый слой PieChart маркеров на карту
             map.addLayer(piechartLayer);
+        }
+
+        function getDatafromShapeTxt(val) {
+            geojson.clearLayers();
+            nodataflag = false;
+            document.getElementById("messagesShape").innerHTML = '';
+            if (val != '') {
+                document.getElementById('loadShape').style.visibility = "visible";
+                val = val.replace(/,/g,".");
+                var records_list = val.trim().split(/\r?\n/);
+                var parametr = records_list[0].split("*");
+                if (!parametr[1]) { parametr[1] = ''; }
+                records_list.shift();
+                var i = 0;
+                RFregionsData.features.forEach(function (features) {
+                    features.properties.custom = records_list[i];
+                    if (!records_list[i]) { nodataflag = true;}
+                    i++;
+                });
+                var i = 0, q = records_list.length;
+                while (i<q) {
+                    if (!records_list[i]) { records_list.splice(i, 1); q--; }
+                    else { i++;}
+                }
+
+                var max = Math.max.apply(Math,records_list);
+                var min = Math.min.apply(Math, records_list);
+                max = Math.log(max);
+                min = Math.log(min);
+                grades[0] = min;
+                var z = (max - min) / 8;
+                for (i = 1; i<8; i++)
+                    {
+                    grades[i] = grades[i-1]+z;
+                }
+                for (i = 0; i < 8; i++) {
+                    grades[i] = Math.pow(2.71828, grades[i]);
+                    (grades[i] > 1 ? grades[i] = Math.floor(grades[i]) : grades[i] = grades[i].toFixed(3));
+                }
+
+                geojson = L.geoJson(RFregionsData, { style: customstyle, onEachFeature: onEachFeature }).bindPopup(function (layer) {
+                    var str = layer.feature.properties.name + "<br>" + parametr[0] + ": " + layer.feature.properties.custom + " " + parametr[1];
+                    return str;
+                }).addTo(map);
+
+                function onEachFeature(feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight
+                    });
+                }
+
+                function resetHighlight(e) {
+                    geojson.resetStyle(e.target);
+                }
+
+                function highlightFeature(e) {
+                    var layer = e.target;
+
+                    layer.setStyle({
+                        weight: 3,
+                        color: '#666',
+                        dashArray: '',
+                        fillOpacity: 0.7
+                    });
+
+                    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                        layer.bringToFront();
+                    }
+                }
+
+                legendShape.addTo(map);
+                map.setView([66.73, 100.99], 3);
+                document.getElementById('loadShape').style.visibility = "hidden";
+            }
+            else { document.getElementById("messagesShape").innerHTML = 'Empty string!'; }
+        }
+
+        function showDensity() {
+            geojson.clearLayers();
+            document.getElementById('loadShape').style.visibility = "visible";
+            grades = [0, 10, 20, 50, 100, 200, 500, 1000];
+            nodataflag = false;
+
+            //var myStyle = {
+            //    "color": "#ff7800",
+            //    "weight": 1,
+            //    "opacity": 0.65
+            //};
+            //var shpfile = new L.Shapefile('https://raw.githubusercontent.com/iacmac-web-tools/CityMap/master/docs/shape.zip', {
+            //    onEachFeature: function (feature, layer) {
+            //        /* Add some colors based on shapefile features */
+            //    }
+            //});
+            //shpfile.addTo(map);
+
+            geojson = L.geoJson(RFregionsData, { style: style, onEachFeature: onEachFeature }).bindPopup(function (layer) {
+                var str = layer.feature.properties.name + "<br> Плотность населения: " + layer.feature.properties.density + " чел/км²";
+                return str;
+            }).addTo(map);
+
+            function onEachFeature(feature, layer) {
+                layer.on({
+                    mouseover: highlightFeature,
+                    mouseout: resetHighlight
+                });
+            }
+
+            function resetHighlight(e) {
+                geojson.resetStyle(e.target);
+            }
+
+            function highlightFeature(e) {
+                var layer = e.target;
+
+                layer.setStyle({
+                    weight: 3,
+                    color: '#666',
+                    dashArray: '',
+                    fillOpacity: 0.7
+                });
+
+                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                    layer.bringToFront();
+                }
+            }
+
+            legendShape.addTo(map);
+            map.setView([66.73, 100.99], 3);
+            document.getElementById('loadShape').style.visibility = "hidden";
+        }
+
+
+        legendShape.onAdd = function (map) {
+
+            var div = L.DomUtil.create('div', 'info legendShape');
+
+            // loop through our density intervals and generate a label with a colored square for each interval
+            if (nodataflag) { div.innerHTML = '<i style="background:#8ed2a3"></i>Нет данных<br>'; }
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+            }
+
+            return div;
+        };
+
+        function getColor(d) {
+            return !d ? '#8ed2a3' :
+                   d > grades[7] ? '#800026' :
+                   d > grades[6] ? '#BD0026' :
+                   d > grades[5] ? '#E31A1C' :
+                   d > grades[4] ? '#FC4E2A' :
+                   d > grades[3] ? '#FD8D3C' :
+                   d > grades[2] ? '#FEB24C' :
+                   d > grades[1] ? '#FED976' :
+                            '#FFEDA0';
+        }
+
+        function customstyle(feature) {
+            return {
+                fillColor: getColor(feature.properties.custom),
+                weight: 1,
+                opacity: 1,
+                color: 'white',
+                dashArray: '',
+                fillOpacity: 0.7
+            };
+        }
+
+        function style(feature) {
+            return {
+                fillColor: getColor(feature.properties.density),
+                weight: 1,
+                opacity: 1,
+                color: 'white',
+                dashArray: '',
+                fillOpacity: 0.7
+            };
         }
 
         // ====== Geocoding ======
