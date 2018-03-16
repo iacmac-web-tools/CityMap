@@ -252,7 +252,7 @@
 
     </style>
 
-    <title>CityMap ver.1.3.0</title>
+    <title>CityMap ver.1.3.1</title>
 </head>
 <body>
     <div id="container">
@@ -686,11 +686,12 @@
         var fillTable = function () {
             document.getElementById("citiesTable").innerHTML = "";
             var tbody = $('#citiesTable');
-            var props = ["fullname", "lat", "lon"];
+            var props = ["txtName","fullname", "lat", "lon"];
             // Write table head
             var th = $('<thead>');
             var tr = $('<tr>');
-            $('<th>').html('City').appendTo(tr);
+            $('<th>').html('Object').appendTo(tr);
+            $('<th>').html('Address').appendTo(tr);
             $('<th>').html('Latitude').appendTo(tr);
             $('<th>').html('Longitude').appendTo(tr);
             th.append(tr);
