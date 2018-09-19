@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -107,7 +107,7 @@
             float: left;
             height: 100%;
             max-width: 100%;
-            width: 240px;
+            width: 255px;
         }
 
         #map {
@@ -183,24 +183,27 @@
             max-height: 85%;
             min-height: 20%;
             height: 60%;
-            max-width: 205px;
-            min-width: 205px;
+            width: 220px;
+     /*       max-width: 205px;
+            min-width: 205px;*/
         }
 
         #txtPiechart {
             max-height: 85%;
             min-height: 20%;
             height: 60%;
-            max-width: 205px;
-            min-width: 205px;
+            width: 220px;
+        /*    max-width: 205px;
+            min-width: 205px;*/
         }
 
        #txtShape {
             max-height: 85%;
             min-height: 20%;
             height: 60%;
-            max-width: 205px;
-            min-width: 205px;
+            width: 220px;
+  /*          max-width: 205px;
+            min-width: 205px;*/
         }
 
         #ex1Slider .slider-selection {
@@ -258,13 +261,13 @@
     <div id="container">
         <div id="sidebar">
             <div class="sidebar-wrapper">
-            	<div class=”block-text” style="text-align: right; margin-right: 10px;">
-            	                	<a href="UserGuide.pdf" download="User guide" style="color: red">Help (?)</a> </div>
                 <div class="container">
-                    <ul class="nav nav-pills" style="margin-top: 0px;">
-                        <li class="active"><a href="#Pin" data-toggle="tab" style="border-radius: 0;">Pin</a></li>
-                        <li><a href="#Pie" data-toggle="tab" style="border-radius: 0;">Pie</a></li>
-                        <li><a href="#Shape" data-toggle="tab" style="border-radius: 0;">Shape</a></li>
+                    <ul class="nav nav-pills" style="margin: 0px;">
+                        <li role="presentation" class="active"><a href="#Pin" data-toggle="tab" style="border-radius: 0;">Pin</a></li>
+                        <li role="presentation"><a href="#Pie" data-toggle="tab" style="border-radius: 0;">Pie</a></li>
+                        <li role="presentation"><a href="#Shape" data-toggle="tab" style="border-radius: 0;">Shape</a></li>
+                        <li role="presentation"><a href="UserGuide.pdf" download="User guide" style="border-radius: 0; color: red">Help <i class="glyphicon glyphicon-question-sign"></i>
+                        </a></li>
                     </ul>
 
                     <div class="tab-content clearfix">
