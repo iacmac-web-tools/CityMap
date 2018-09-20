@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="https://www.w3.org/1999/xhtml">
 <head>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -81,7 +81,7 @@
             height: 100%;
             position: fixed;
             z-index: 9999;
-            background: url("http://centermed.pl/gif-load.gif") no-repeat;
+            background: url("https://centermed.pl/gif-load.gif") no-repeat;
             margin: 50px;
         }
 
@@ -90,7 +90,7 @@
             height: 100%;
             position: fixed;
             z-index: 9999;
-            background: url("http://centermed.pl/gif-load.gif") no-repeat;
+            background: url("https://centermed.pl/gif-load.gif") no-repeat;
             margin: 50px;
         }
 
@@ -99,7 +99,7 @@
             height: 100%;
             position: fixed;
             z-index: 9999;
-            background: url("http://centermed.pl/gif-load.gif") no-repeat;
+            background: url("https://centermed.pl/gif-load.gif") no-repeat;
             margin: 50px;
         }
 
@@ -619,17 +619,17 @@
         var grades = [0, 10, 20, 50, 100, 200, 500, 1000];
 
         // Links to map sources
-        var yandexMap = L.tileLayer('http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU', {
+        var yandexMap = L.tileLayer('https://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU', {
             subdomains: ['01', '02', '03', '04'], reuseTiles: true, updateWhenIdle: false
         });
-        var yandexMapEng = L.tileLayer('http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=en_US', {
+        var yandexMapEng = L.tileLayer('https://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=en_US', {
             subdomains: ['01', '02', '03', '04'], reuseTiles: true, updateWhenIdle: false
         });
-        var osmMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-        var roadsMap = L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}');
-        var stamMap = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', { subdomains: 'abcd', minZoom: 0, maxZoom: 20, ext: 'png' });
-        var esriMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}');
-        var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
+        var osmMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        var roadsMap = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}');
+        var stamMap = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', { subdomains: 'abcd', minZoom: 0, maxZoom: 20, ext: 'png' });
+        var esriMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}');
+        var googleStreets = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
 
 
         // Initialize map
