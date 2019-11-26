@@ -1,7 +1,16 @@
 ﻿<!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="https://www.w3.org/1999/xhtml">
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-85066436-6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-85066436-6');
+</script>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
@@ -23,16 +32,13 @@
     <meta charset="utf-8" />
 
     <style>
-        /*#region LEFALET FULLSCREEN ENABLING */
-
         .myCSSClass {
                 padding: 0px;
-  				font-weight: bold;
-		}
-
+                font-weight: bold;
+        }
+        /*#region LEFALET FULLSCREEN ENABLING */        
         .fullscreen-icon {
         }
-
         .leaflet-retina .fullscreen-icon {
         }
         /* one selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */
@@ -41,25 +47,21 @@
             height: 100% !important;
             z-index: 99999;
         }
-
         .leaflet-container:-ms-fullscreen {
             width: 100% !important;
             height: 100% !important;
             z-index: 99999;
         }
-
         .leaflet-container:full-screen {
             width: 100% !important;
             height: 100% !important;
             z-index: 99999;
         }
-
         .leaflet-container:fullscreen {
             width: 100% !important;
             height: 100% !important;
             z-index: 99999;
         }
-
         .leaflet-pseudo-fullscreen {
             position: fixed !important;
             width: 100% !important;
@@ -68,11 +70,8 @@
             left: 0px !important;
             z-index: 99999;
         }
-
         /*#endregion */
-
         /*#region LEAFLET FILL PAGE AND SIDEBAR */
-
         html, body, #container {
             height: 100%;
             overflow: hidden;
@@ -80,75 +79,63 @@
             margin: 0px;
             padding: 0px;
         }
-
         #loadPin {
             width: 100%;
             height: 100%;
             position: fixed;
             z-index: 9999;
-            background: url("http://centermed.pl/gif-load.gif") no-repeat;
+            background: url("https://centermed.pl/gif-load.gif") no-repeat;
             margin: 50px;
         }
-
         #loadPie {
             width: 100%;
             height: 100%;
             position: fixed;
             z-index: 9999;
-            background: url("http://centermed.pl/gif-load.gif") no-repeat;
+            background: url("https://centermed.pl/gif-load.gif") no-repeat;
             margin: 50px;
         }
-
         #loadShape {
             width: 100%;
             height: 100%;
             position: fixed;
             z-index: 9999;
-            background: url("http://centermed.pl/gif-load.gif") no-repeat;
+            background: url("https://centermed.pl/gif-load.gif") no-repeat;
             margin: 50px;
         }
-
         #sidebar {
             float: left;
             height: 100%;
             max-width: 100%;
-            width: 240px;
+            width: 255px;
         }
-
         #map {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             height: 100%;
             width: auto;
         }
-
         .sidebar-wrapper {
             height: 100%;
             position: relative;
             width: 100%;
         }
-
         @media (max-width: 600px) {
             #sidebar {
                 display: none;
             }
         }
-
         /*#endregion */
-
         /*#region LEGEND */
         ul {
             margin: 20px;
             list-style-type: none;
         }
-
         .input-color {
             position: relative;
         }
-
             .input-color input {
                 padding-left: 20px;
             }
-
             .input-color .color-box {
                 width: 10px;
                 height: 10px;
@@ -159,12 +146,9 @@
                 top: 9px;
             }
         /*#endregion */
-
         .table > tbody > tr > td {
             vertical-align: middle;
         }
-
-
         #features, .container, .panel {
             height: 100%;
             margin: 0px;
@@ -172,63 +156,56 @@
             width: auto;
             position: static;
         }
-
         .panel-footer {
             position: absolute;
             width: 100%;
             bottom: 0;
         }
-
         .panel-body {
             height: 100%;
             position: absolute;
         }
-
         #txtCities {
             max-height: 85%;
             min-height: 20%;
             height: 60%;
-            max-width: 205px;
-            min-width: 205px;
+            width: 220px;
+     /*       max-width: 205px;
+            min-width: 205px;*/
         }
-
         #txtPiechart {
             max-height: 85%;
             min-height: 20%;
             height: 60%;
-            max-width: 205px;
-            min-width: 205px;
+            width: 220px;
+        /*    max-width: 205px;
+            min-width: 205px;*/
         }
-
        #txtShape {
             max-height: 85%;
             min-height: 20%;
             height: 60%;
-            max-width: 205px;
-            min-width: 205px;
+            width: 220px;
+  /*          max-width: 205px;
+            min-width: 205px;*/
         }
-
         #ex1Slider .slider-selection {
             background: #BABABA;
         }
-
         #ex1Slider {
             width: 185px;
             margin-left: 8%;
         }
-
         .legend {
             line-height: 18px;
             color: #555;
         }
-
             .legend i {
                 width: 16px;
                 height: 16px;
                 float: left;
                 margin-right: 8px;
             }
-
         .legendShape {
             line-height: 18px;
             color: #555;
@@ -240,8 +217,6 @@
             margin-right: 8px;
             opacity: 0.7;
         }
-
-
         .info {
             padding: 6px 8px;
             font: 16px Helvetica;
@@ -249,34 +224,32 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 5px;
         }
-
             .info h4 {
                 margin: 0 0 5px;
                 color: #777;
             }
-
     </style>
 
-    <title>CityMap ver.1.3.3</title>
+    <title>CityMap ver.1.3.4</title>
 </head>
 <body>
     <div id="container">
         <div id="sidebar">
             <div class="sidebar-wrapper">
-            	<div class=”block-text” style="text-align: right; margin-right: 10px;">
-            	                	<a href="UserGuide.pdf" download="User guide" style="color: red">Help (?)</a> </div>
                 <div class="container">
-                    <ul class="nav nav-pills" style="margin-top: 0px;">
-                        <li class="active"><a href="#Pin" data-toggle="tab" style="border-radius: 0;">Pin</a></li>
-                        <li><a href="#Pie" data-toggle="tab" style="border-radius: 0;">Pie</a></li>
-                        <li><a href="#Shape" data-toggle="tab" style="border-radius: 0;">Shape</a></li>
+                    <ul class="nav nav-pills" style="margin: 0px;">
+                        <li role="presentation" class="active"><a href="#Pin" data-toggle="tab" style="border-radius: 0;">Pin</a></li>
+                        <li role="presentation"><a href="#Pie" data-toggle="tab" style="border-radius: 0;">Pie</a></li>
+                        <li role="presentation"><a href="#Shape" data-toggle="tab" style="border-radius: 0;">Shape</a></li>
+                        <li role="presentation"><a href="UserGuide.pdf" download="User guide" style="border-radius: 0; color: red">Help <i class="glyphicon glyphicon-question-sign"></i>
+                        </a></li>
                     </ul>
 
                     <div class="tab-content clearfix">
                         <div class="tab-pane active" id="Pin">
                             <div id="features" class="panel panel-primary">
                                 <div class="panel-body">
-                                	<div class="row">
+                                    <div class="row">
                                         <p>&emsp;&emsp;Marker label:    <input id="label_toggle" type="checkbox" data-toggle="toggle"></p>
                                     </div>
                                     <textarea id="txtCities" class="form-control" type="text" placeholder="Enter cities here line by line"></textarea>
@@ -371,7 +344,6 @@
 
     <script>
         (function () {
-
             L.Control.FullScreen = L.Control.extend({
                 options: {
                     position: 'topleft',
@@ -381,53 +353,41 @@
                     forcePseudoFullscreen: false,
                     fullscreenElement: false
                 },
-
                 onAdd: function (map) {
                     var className = 'leaflet-control-zoom-fullscreen', container, content = '';
-
                     if (map.zoomControl && !this.options.forceSeparateButton) {
                         container = map.zoomControl._container;
                     } else {
                         container = L.DomUtil.create('div', 'leaflet-bar');
                     }
-
                     if (this.options.content) {
                         content = this.options.content;
                     } else {
                         className += ' fullscreen-icon glyphicon glyphicon-fullscreen';
                     }
-
                     this._createButton(this.options.title, className, content, container, this.toggleFullScreen, this);
-
                     this._map.on('enterFullscreen exitFullscreen', this._toggleTitle, this);
-
                     return container;
                 },
-
                 _createButton: function (title, className, content, container, fn, context) {
                     this.link = L.DomUtil.create('a', className, container);
                     this.link.href = '#';
                     this.link.title = title;
                     this.link.innerHTML = content;
-
                     L.DomEvent
                         .addListener(this.link, 'click', L.DomEvent.stopPropagation)
                         .addListener(this.link, 'click', L.DomEvent.preventDefault)
                         .addListener(this.link, 'click', fn, context);
-
                     L.DomEvent
                         .addListener(container, fullScreenApi.fullScreenEventName, L.DomEvent.stopPropagation)
                         .addListener(container, fullScreenApi.fullScreenEventName, L.DomEvent.preventDefault)
                         .addListener(container, fullScreenApi.fullScreenEventName, this._handleEscKey, context);
-
                     L.DomEvent
                         .addListener(document, fullScreenApi.fullScreenEventName, L.DomEvent.stopPropagation)
                         .addListener(document, fullScreenApi.fullScreenEventName, L.DomEvent.preventDefault)
                         .addListener(document, fullScreenApi.fullScreenEventName, this._handleEscKey, context);
-
                     return this.link;
                 },
-
                 toggleFullScreen: function () {
                     var map = this._map;
                     map._exitFired = false;
@@ -453,11 +413,9 @@
                         map._isFullscreen = true;
                     }
                 },
-
                 _toggleTitle: function () {
                     this.link.title = this._map._isFullscreen ? this.options.title : this.options.titleCancel;
                 },
-
                 _handleEscKey: function () {
                     var map = this._map;
                     if (!fullScreenApi.isFullScreen(map) && !map._exitFired) {
@@ -467,25 +425,21 @@
                     }
                 }
             });
-
             L.Map.addInitHook(function () {
                 if (this.options.fullscreenControl) {
                     this.fullscreenControl = L.control.fullscreen(this.options.fullscreenControlOptions);
                     this.addControl(this.fullscreenControl);
                 }
             });
-
             L.control.fullscreen = function (options) {
                 return new L.Control.FullScreen(options);
             };
-
             /*
             Native FullScreen JavaScript API
             -------------
             Assumes Mozilla naming conventions instead of W3C for now
             source : http://johndyer.name/native-fullscreen-javascript-api-plus-jquery-plugin/
             */
-
             var
                 fullScreenApi = {
                     supportsFullScreen: false,
@@ -496,7 +450,6 @@
                     prefix: ''
                 },
                 browserPrefixes = 'webkit moz o ms khtml'.split(' ');
-
             // check for native support
             if (typeof document.exitFullscreen !== 'undefined') {
                 fullScreenApi.supportsFullScreen = true;
@@ -514,7 +467,6 @@
                     fullScreenApi.supportsFullScreen = true;
                 }
             }
-
             // update methods to do something useful
             if (fullScreenApi.supportsFullScreen) {
                 if (fullScreenApi.prefix === 'ms') {
@@ -555,7 +507,6 @@
                     }
                 };
             }
-
             // jQuery plugin
             if (typeof jQuery !== 'undefined') {
                 jQuery.fn.requestFullScreen = function () {
@@ -567,7 +518,6 @@
                     });
                 };
             }
-
             // export api
             window.fullScreenApi = fullScreenApi;
         })();
@@ -578,7 +528,6 @@
 
     <script>
         // Initialise elements on page
-
         // Enabling button Show table
         $('#citiesCoordModal').on('shown.bs.modal', function () {
             $('#myInput').focus()
@@ -587,15 +536,12 @@
         $('#legendModal').on('shown.bs.modal', function () {
             $('#myInput').focus()
         })
-
         $("#radius_slider").slider({
             tooltip_position: 'bottom'
         });
         $("#radius_slider").on("slide", function (slideEvt) {
             $("#radius_sliderSliderVal").text(slideEvt.value);
         });
-
-
         function getRandomColor() {
             var letters = '0123456789ABCDEF';
             var color = '#';
@@ -604,8 +550,7 @@
             }
             return color;
         }
-
-		var colorWell = [];
+        var colorWell = [];
         var colors = ['#FF0000', '#00CC33', '#0099FF', '#FFFF33', '#FFCC00', '#FF9933', '#990033', '#CC9999', '#993399', '#FF99FF', '#9900FF', '#9999FF', '#000099', '#006666', '#00FFFF', '#006600', '#996600', '#66FF00', '#99CC33', '#CCCC33', '#666600', '#CCCCCC'];
         var geo = new google.maps.Geocoder();
         var cities = [];
@@ -622,21 +567,18 @@
         var legendShape = L.control({ position: 'bottomright' });
         var nodataflag = false;
         var grades = [0, 10, 20, 50, 100, 200, 500, 1000];
-
         // Links to map sources
-        var yandexMap = L.tileLayer('http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU', {
+        var yandexMap = L.tileLayer('https://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU', {
             subdomains: ['01', '02', '03', '04'], reuseTiles: true, updateWhenIdle: false
         });
-        var yandexMapEng = L.tileLayer('http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=en_US', {
+        var yandexMapEng = L.tileLayer('https://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=en_US', {
             subdomains: ['01', '02', '03', '04'], reuseTiles: true, updateWhenIdle: false
         });
-        var osmMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-        var roadsMap = L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}');
-        var stamMap = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', { subdomains: 'abcd', minZoom: 0, maxZoom: 20, ext: 'png' });
-        var esriMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}');
-        var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
-
-
+        var osmMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        var roadsMap = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}');
+        var stamMap = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', { subdomains: 'abcd', minZoom: 0, maxZoom: 20, ext: 'png' });
+        var esriMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}');
+        var googleStreets = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
         // Initialize map
         var map = L.map('map', {
             center: [56.73, 36.99],
@@ -656,13 +598,10 @@
             "RoadsMap": roadsMap,
             "Esri Map": esriMap
         };
-
-
         // Attach layers to map
         map.options.crs = L.CRS.EPSG3395;
         L.control.layers(baseMaps).addTo(map);
         markersLayer.addTo(map);
-
         // Смена типа карты в правом верхнем углу
         map.on('baselayerchange', function (event) {
             if (event.name == "Yandex Map" || event.name == "Yandex Map ENG") {
@@ -691,7 +630,7 @@
                  if (label_toggle.checked) {
                 markersLayer.addLayer(L.marker([city.lat, city.lon]).bindPopup(city.fullname).bindTooltip(city.txtName, 
     {
-    	className: 'myCSSClass',
+        className: 'myCSSClass',
         permanent: true,
         direction: 'bottom'
     }
@@ -736,7 +675,6 @@
             });
             tbody.append(tb);
         }
-
         //Change radius-toggle
         $(function () {
             $('#radius_toggle').change(function () {
@@ -749,22 +687,18 @@
                 redrawPieChart();
             })
         })
-
         //Change radius-slider
         $("#radius_slider").on("slide", function (slideEvt) {
             redrawPieChart();
         });
-
         function clearMap() {
             markersLayer.clearLayers();
             piechartLayer.clearLayers();
         }
-
         function ShowLegendOnMap() {
             if (Legend.getPosition() == 'bottomright') { Legend.setPosition('none') }
             else { Legend.setPosition('bottomright') }
         }
-
         function getDatafromTxt(val) {
             if (val != '') {
                 PieChart = true;
@@ -793,7 +727,6 @@
                 while (alltxt.length > colors.length) {
                     colors.push(getRandomColor());
                 }
-
                 for (var i = 0; i < records_list.length; i++) {
                     if (piechartarray.map(x => x.City).indexOf(current_data[i].city) == -1) {
                         piechartarray.push({
@@ -817,14 +750,12 @@
             }
             else { document.getElementById("messagesPie").innerHTML = 'Empty string!'; }
         }
-
         function makePiechart() {
             var bounds = [];
             clearMap();
             $('#radius_toggle').bootstrapToggle('enable');
             $("#radius_slider").slider("enable");
             document.getElementById("btnShowLegendOnMap").disabled = false;
-
             //Удаляем нераспознанные города из массива маркеров
             while (piechartarray.length != cities.length) {
                 for (var i = 0; i < piechartarray.length; i++) {
@@ -833,7 +764,6 @@
                     }
                 }
             }
-
             //Заносим в массив маркеров значения широты и долготы
             for (var i = 0; i < cities.length; i++) {
                 var x = piechartarray.map(x => x.City).indexOf(cities[i].txtName);
@@ -842,10 +772,8 @@
                 piechartarray[x].fullname = cities[i].fullname;
                 bounds.push([cities[i].lat, cities[i].lon]);
             }
-
             var max = Math.max.apply(Math, piechartarray.map(function (o) { return o.Total; }));
             var min = Math.min.apply(Math, piechartarray.map(function (o) { return o.Total; }));
-
             for (var i = piechartarray.length - 1; i >= 0; i--) {
                 var data = {};
                 var chartOptions = {};
@@ -854,8 +782,6 @@
                     if (!radius) { radius = 15 }
                 }
                 else { radius = parseInt(radius_slider.value) }
-
-
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
                         data[alltxt[j].trim()] = piechartarray[i].Count[j] / piechartarray[i].Total,
@@ -874,7 +800,6 @@
                     data: data,
                     chartOptions: chartOptions,
                 }
-
                 var bchMarker = new L.PieChartMarker(new L.LatLng(piechartarray[i].Latitude, piechartarray[i].Longitude), options);
                 var str = "<h3>" + piechartarray[i].fullname + "</h3><table class=\"table table-bordered\"><tr style=\"font-weight:bold; color:white;\"><th style=\"background-color: #337ab7\">Item</th><th style=\"background-color: #337ab7\">Count</th></tr>";
                 for (var j = 0; j < alltxt.length; j++) {
@@ -891,10 +816,8 @@
                 });
                 bchMarker.addTo(piechartLayer);
             }
-
             //Добавляем итоговый слой PieChart маркеров на карту
             map.addLayer(piechartLayer);
-
             //Добавляем легенду на ShowModal
             $('#legend').html('');
             //var str = "<ul>";
@@ -909,21 +832,16 @@
                 var sum = 0;
                 for (var i = 0; i < piechartarray.length; i++) { sum += parseInt(piechartarray[i].Count[j]); }
                 //str += "<i style=\"background:" + colors[j] + "\"></i>" + alltxt[j] + "\t(N = " + sum +  ")<br>";
-            	str += "<input type=\"color\" value=\""+colors[j]+"\" id=\"colorWell"+j+"\">\t" + alltxt[j] + "\t(N = " + sum +  ")<br>";
+                str += "<input type=\"color\" value=\""+colors[j]+"\" id=\"colorWell"+j+"\">\t" + alltxt[j] + "\t(N = " + sum +  ")<br>";
             }
             str += "</div>";
             $('#legend').html(str);
-
-
 for (var j = 0; j < alltxt.length; j++) { colorWell[j] = document.querySelector("#colorWell"+j); 
 colorWell[j].addEventListener("change", updateAll, false);}
-
-
             //Добавляем легенду на карту
             map.removeControl(Legend);
             Legend.onAdd = function (map) {
                 var div = L.DomUtil.create('div', 'info legend');
-
                 for (var i = 0; i < alltxt.length; i++) {
                     var sum = 0;
                     for (var j = 0; j < piechartarray.length; j++) { sum += parseInt(piechartarray[j].Count[i]); }
@@ -932,29 +850,22 @@ colorWell[j].addEventListener("change", updateAll, false);}
                 return div;
             };
             Legend.addTo(map);
-
-
             //Фокусируемся на входящих маркерах
             if (piechartarray.length != 0) {
                 var group = new L.LatLngBounds(bounds);
                 map.fitBounds(group);
             }
-
         }
-
         function updateAll(event) {
   var str= event.target.id;
   colors[str.substring(9)] = event.target.value;
   redrawPieChart();
 Legend.setPosition('bottomright') ;
 }
-
         function redrawPieChart() {
             clearMap();
-
             var max = Math.max.apply(Math, piechartarray.map(function (o) { return o.Total; }));
             var min = Math.min.apply(Math, piechartarray.map(function (o) { return o.Total; }));
-
             for (var i = piechartarray.length - 1; i >= 0; i--) {
                 var data = {};
                 var chartOptions = {};
@@ -963,7 +874,6 @@ Legend.setPosition('bottomright') ;
                     if (!radius) { radius = 15 }
                 }
                 else { radius = parseInt(radius_slider.value) }
-
                 for (var j = 0; j < alltxt.length; j++) {
                     if (piechartarray[i].Count[j] != 0) {
                         data[alltxt[j].trim()] = piechartarray[i].Count[j] / piechartarray[i].Total,
@@ -982,7 +892,6 @@ Legend.setPosition('bottomright') ;
                     data: data,
                     chartOptions: chartOptions,
                 }
-
                 var bchMarker = new L.PieChartMarker(new L.LatLng(piechartarray[i].Latitude, piechartarray[i].Longitude), options);
                 var str = "<h3>" + piechartarray[i].fullname + "</h3><table class=\"table table-bordered\"><tr style=\"font-weight:bold; color:white;\"><th style=\"background-color: #337ab7\">Item</th><th style=\"background-color: #337ab7\">Count</th></tr>";
                 for (var j = 0; j < alltxt.length; j++) {
@@ -999,11 +908,9 @@ Legend.setPosition('bottomright') ;
                 });
                 bchMarker.addTo(piechartLayer);
             }
-
             //Добавляем итоговый слой PieChart маркеров на карту
             map.addLayer(piechartLayer);
         }
-
         function getDatafromShapeTxt(val) {
             geojson.clearLayers();
             nodataflag = false;
@@ -1026,7 +933,6 @@ Legend.setPosition('bottomright') ;
                     if (!records_list[i]) { records_list.splice(i, 1); q--; }
                     else { i++;}
                 }
-
                 var max = Math.max.apply(Math,records_list);
                 var min = Math.min.apply(Math, records_list);
                 max = Math.log(max);
@@ -1041,51 +947,42 @@ Legend.setPosition('bottomright') ;
                     grades[i] = Math.pow(2.71828, grades[i]);
                     (grades[i] > 1 ? grades[i] = Math.floor(grades[i]) : grades[i] = grades[i].toFixed(3));
                 }
-
                 geojson = L.geoJson(RFregionsData, { style: customstyle, onEachFeature: onEachFeature }).bindPopup(function (layer) {
                     var str = layer.feature.properties.name + "<br>" + parametr[0] + ": " + layer.feature.properties.custom + " " + parametr[1];
                     return str;
                 }).addTo(map);
-
                 function onEachFeature(feature, layer) {
                     layer.on({
                         mouseover: highlightFeature,
                         mouseout: resetHighlight
                     });
                 }
-
                 function resetHighlight(e) {
                     geojson.resetStyle(e.target);
                 }
-
                 function highlightFeature(e) {
                     var layer = e.target;
-
                     layer.setStyle({
                         weight: 3,
                         color: '#666',
                         dashArray: '',
                         fillOpacity: 0.7
                     });
-
                     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                         layer.bringToFront();
                     }
                 }
-
                 legendShape.addTo(map);
                 map.setView([66.73, 100.99], 3);
                 document.getElementById('loadShape').style.visibility = "hidden";
             }
             else { document.getElementById("messagesShape").innerHTML = 'Empty string!'; }
         }
-
         function showDensity() {
             geojson.clearLayers();
             document.getElementById('loadShape').style.visibility = "visible";
             grades = [0, 10, 20, 50, 100, 200, 500, 1000];
             nodataflag = false;
-
             //var myStyle = {
             //    "color": "#ff7800",
             //    "weight": 1,
@@ -1097,48 +994,37 @@ Legend.setPosition('bottomright') ;
             //    }
             //});
             //shpfile.addTo(map);
-
             geojson = L.geoJson(RFregionsData, { style: style, onEachFeature: onEachFeature }).bindPopup(function (layer) {
                 var str = layer.feature.properties.name + "<br> Плотность населения: " + layer.feature.properties.density + " чел/км²";
                 return str;
             }).addTo(map);
-
             function onEachFeature(feature, layer) {
                 layer.on({
                     mouseover: highlightFeature,
                     mouseout: resetHighlight
                 });
             }
-
             function resetHighlight(e) {
                 geojson.resetStyle(e.target);
             }
-
             function highlightFeature(e) {
                 var layer = e.target;
-
                 layer.setStyle({
                     weight: 3,
                     color: '#666',
                     dashArray: '',
                     fillOpacity: 0.7
                 });
-
                 if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                     layer.bringToFront();
                 }
             }
-
             legendShape.addTo(map);
             map.setView([66.73, 100.99], 3);
             document.getElementById('loadShape').style.visibility = "hidden";
         }
-
-
         legendShape.onAdd = function (map) {
-
             var div = L.DomUtil.create('div', 'info legendShape');
-
             // loop through our density intervals and generate a label with a colored square for each interval
             if (nodataflag) { div.innerHTML = '<i style="background:#8ed2a3"></i>Нет данных<br>'; }
             for (var i = 0; i < grades.length; i++) {
@@ -1146,10 +1032,8 @@ Legend.setPosition('bottomright') ;
                     '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
                     grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
             }
-
             return div;
         };
-
         function getColor(d) {
             return !d ? '#8ed2a3' :
                    d > grades[7] ? '#800026' :
@@ -1161,7 +1045,6 @@ Legend.setPosition('bottomright') ;
                    d > grades[1] ? '#FED976' :
                             '#FFEDA0';
         }
-
         function customstyle(feature) {
             return {
                 fillColor: getColor(feature.properties.custom),
@@ -1172,7 +1055,6 @@ Legend.setPosition('bottomright') ;
                 fillOpacity: 0.7
             };
         }
-
         function style(feature) {
             return {
                 fillColor: getColor(feature.properties.density),
@@ -1183,7 +1065,6 @@ Legend.setPosition('bottomright') ;
                 fillOpacity: 0.7
             };
         }
-
         // ====== Geocoding ======
         function getCoordFromGoogle(val) {
             if (val != '') {
@@ -1198,7 +1079,6 @@ Legend.setPosition('bottomright') ;
             }
             else { document.getElementById("messagesPin").innerHTML = 'Empty string!'; }
         }
-
         function theNext() {
             if (PieChart == false) {
                 if (nextAddress < cities_list.length) {
@@ -1225,9 +1105,7 @@ Legend.setPosition('bottomright') ;
                     document.getElementById('loadPie').style.visibility = "hidden";
                 }
             }
-
         }
-
         function getAddress(search, next) {
             geo.geocode({ address: search }, function (results, status) {
                 // If that was successful
