@@ -16,21 +16,21 @@ const BASE_CACHE_FILES = [
   "/static/css/bootstrap-toggle.min.css",
   "/static/css/bootstrap.min.css",
   "/static/css/dvf.min.css",
-  "/static/css/leaflet.css",
+  "//unpkg.com/leaflet@1.0.3/dist/leaflet.css",
 
   "/static/fonts/glyphicons-halflings-regular.eot",
   "/static/fonts/glyphicons-halflings-regular.svg",
   "/static/fonts/glyphicons-halflings-regular.ttf",
   "/static/fonts/glyphicons-halflings-regular.woff",
-  "/static/fonts/glyphicons-halflings-regular.woff2"
+  "/static/fonts/glyphicons-halflings-regular.woff2",
 
   "/static/js/bootstrap-slider.js",
   "/static/js/bootstrap-toggle.min.js",
   "/static/js/bootstrap.min.js",
   "/static/js/jquery-3.1.1.min.js",
   "/static/js/leaflet-dvf.js",
-  "/static/js/leaflet.js",
-  "/static/js/RFregions.js"
+  "/static/js/RFregions.js",
+  "//unpkg.com/leaflet@1.0.3/dist/leaflet.js"
 ];
 
 const OFFLINE_CACHE_FILES = [
