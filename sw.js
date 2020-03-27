@@ -1,4 +1,4 @@
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 
 const BASE_CACHE_FILES = [
   "/site.webmanifest",
@@ -28,9 +28,9 @@ const BASE_CACHE_FILES = [
   "/static/js/bootstrap-toggle.min.js",
   "/static/js/bootstrap.min.js",
   "/static/js/jquery-3.1.1.min.js",
+  "//unpkg.com/leaflet@1.0.3/dist/leaflet.js",
   "/static/js/leaflet-dvf.js",
   "/static/js/RFregions.js",
-  "//unpkg.com/leaflet@1.0.3/dist/leaflet.js"
 ];
 
 const OFFLINE_CACHE_FILES = [
