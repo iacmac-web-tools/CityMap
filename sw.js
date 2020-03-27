@@ -1,4 +1,4 @@
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 4;
 
 const BASE_CACHE_FILES = [
   "/site.webmanifest",
@@ -60,13 +60,13 @@ const CACHE_VERSIONS = {
 
 // Define MAX_TTL's in SECONDS for specific file extensions
 const MAX_TTL = {
-  "/": 3600,
-  html: 3600,
-  json: 864000,
-  js: 864000,
-  css: 864000,
-  svg: 864000,
-  png: 864000
+  "/": 31536000,
+  html: 31536000,
+  json: 86400,
+  js: 31536000,
+  css: 31536000,
+  svg: 31536000,
+  png: 86400
 };
 
 const CACHE_BLACKLIST = [
