@@ -1,16 +1,16 @@
-const CACHE_VERSION = 1;
+const CACHE_VERSION = 2;
 
 const BASE_CACHE_FILES = [
   "/site.webmanifest",
   "/browserconfig.xml",
 
-  "/img/android-chrome-192x192.png",
-  "/img/android-chrome-512x512.png",
-  "/img/apple-touch-icon.png",
-  "/img/favicon-16x16.png",
-  "/img/favicon-32x32.png",
-  "/img/mstile-150x150.png",
-  "/img/safari-pinned-tab.svg",
+  "/static/img/android-chrome-192x192.png",
+  "/static/img/android-chrome-512x512.png",
+  "/static/img/apple-touch-icon.png",
+  "/static/img/favicon-16x16.png",
+  "/static/img/favicon-32x32.png",
+  "/static/img/mstile-150x150.png",
+  "/static/img/safari-pinned-tab.svg",
 
   "/static/css/bootstrap-slider.css",
   "/static/css/bootstrap-toggle.min.css",
@@ -37,13 +37,13 @@ const OFFLINE_CACHE_FILES = [
   "/site.webmanifest",
   "/browserconfig.xml",
 
-  "/img/android-chrome-192x192.png",
-  "/img/android-chrome-512x512.png",
-  "/img/apple-touch-icon.png",
-  "/img/favicon-16x16.png",
-  "/img/favicon-32x32.png",
-  "/img/mstile-150x150.png",
-  "/img/safari-pinned-tab.svg",
+  "/static/img/android-chrome-192x192.png",
+  "/static/img/android-chrome-512x512.png",
+  "/static/img/apple-touch-icon.png",
+  "/static/img/favicon-16x16.png",
+  "/static/img/favicon-32x32.png",
+  "/static/img/mstile-150x150.png",
+  "/static/img/safari-pinned-tab.svg",
 ];
 
 const NOT_FOUND_CACHE_FILES = ["/404.html"];
