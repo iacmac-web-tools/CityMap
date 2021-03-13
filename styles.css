@@ -1,0 +1,276 @@
+.myCSSClass {
+  padding: 0px;
+  font-weight: bold;
+}
+/*#region LEFALET FULLSCREEN ENABLING */
+.fullscreen-icon {
+}
+.leaflet-retina .fullscreen-icon {
+}
+/* one selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */
+.leaflet-container:-webkit-full-screen {
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 99999;
+}
+.leaflet-container:-ms-fullscreen {
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 99999;
+}
+.leaflet-container:full-screen {
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 99999;
+}
+.leaflet-container:fullscreen {
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 99999;
+}
+.leaflet-pseudo-fullscreen {
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0px !important;
+  left: 0px !important;
+  z-index: 99999;
+}
+/*#endregion */
+/*#region LEAFLET FILL PAGE AND SIDEBAR */
+html,
+body,
+#container {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+#sidebar {
+  float: left;
+  height: 100%;
+  max-width: 100%;
+  width: 255px;
+}
+#map {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: auto;
+}
+.sidebar-wrapper {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+@media (max-width: 600px) {
+  #sidebar {
+    display: none;
+  }
+}
+/*#endregion */
+/*#region LEGEND */
+ul {
+  margin: 20px;
+  list-style-type: none;
+}
+.input-color {
+  position: relative;
+}
+.input-color input {
+  padding-left: 20px;
+}
+.input-color .color-box {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  background-color: #ccc;
+  position: absolute;
+  left: 5px;
+  top: 9px;
+}
+/*#endregion */
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
+#features,
+.container,
+.panel {
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  width: auto;
+  position: static;
+}
+.panel-footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+.panel-body {
+  height: calc(100vh - 97px);
+}
+#txtCities {
+  height: calc(100vh - 229px);
+  width: 100%;
+}
+#txtPiechart {
+  height: calc(100vh - 280px);
+  width: 100%;
+}
+#txtShape {
+  height: calc(100vh - 135px);
+  width: 100%;
+}
+#ex1Slider .slider-selection {
+  background: #bababa;
+}
+#ex1Slider {
+  width: 185px;
+  margin-left: 8%;
+}
+.legend {
+  line-height: 18px;
+  color: #555;
+}
+.legend i {
+  width: 16px;
+  height: 16px;
+  float: left;
+  margin-right: 8px;
+}
+.legendShape {
+  line-height: 18px;
+  color: #555;
+}
+.legendShape i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+.info {
+  padding: 6px 8px;
+  font: 16px Helvetica;
+  background: white;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+.info h4 {
+  margin: 0 0 5px;
+  color: #777;
+}
+
+
+/* LOADING OVERLAY */
+body{
+  font-family: Arial, Sans;
+  margin: 0;
+}
+
+.wrapper{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  text-align:center;
+  transform: translateX(-50%);
+}
+
+.spanner{
+  position:absolute;
+  top: 50%;
+  left: 0;
+  background: #2a2a2a55;
+  width: 100%;
+  display:block;
+  text-align:center;
+  height: 300px;
+  color: #FFF;
+  transform: translateY(-50%);
+  z-index: 1000;
+  visibility: hidden;
+}
+
+.overlay{
+  position: fixed;
+	width: 100%;
+	height: 100%;
+  background: rgba(0,0,0,0.5);
+  visibility: hidden;
+}
+
+.loader,
+.loader:before,
+.loader:after {
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation: load7 1.8s infinite ease-in-out;
+  animation: load7 1.8s infinite ease-in-out;
+}
+.loader {
+  color: #ffffff;
+  font-size: 10px;
+  margin: 80px auto;
+  position: relative;
+  text-indent: -9999em;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.loader:before,
+.loader:after {
+  content: '';
+  position: absolute;
+  top: 0;
+}
+.loader:before {
+  left: -3.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader:after {
+  left: 3.5em;
+}
+@-webkit-keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+@keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+
+.show{
+  visibility: visible;
+}
+
+.spanner, .overlay{
+	opacity: 0;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	transition: all 0.3s;
+}
+
+.spanner.show, .overlay.show {
+	opacity: 1
+}

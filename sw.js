@@ -1,55 +1,67 @@
-const CACHE_VERSION = 4;
+const CACHE_VERSION = 5;
 
 const BASE_CACHE_FILES = [
-  "/site.webmanifest",
-  "/browserconfig.xml",
+  "./site.webmanifest",
+  "./browserconfig.xml",
 
-  "/static/img/android-chrome-192x192.png",
-  "/static/img/android-chrome-512x512.png",
-  "/static/img/apple-touch-icon.png",
-  "/static/img/favicon-16x16.png",
-  "/static/img/favicon-32x32.png",
-  "/static/img/mstile-150x150.png",
-  "/static/img/safari-pinned-tab.svg",
+  "./static/img/android-chrome-192x192.png",
+  "./static/img/android-chrome-512x512.png",
+  "./static/img/apple-touch-icon.png",
+  "./static/img/favicon-16x16.png",
+  "./static/img/favicon-32x32.png",
+  "./static/img/mstile-150x150.png",
+  "./static/img/safari-pinned-tab.svg",
 
-  "/static/css/bootstrap-slider.css",
-  "/static/css/bootstrap-toggle.min.css",
-  "/static/css/bootstrap.min.css",
-  "/static/css/dvf.min.css",
-  "//unpkg.com/leaflet@1.0.3/dist/leaflet.css",
+  "./static/css/images/marker-icon.png",
+  "./static/css/images/marker-icon-2x.png",
+  "./static/css/images/marker-shadow.png",
+  "./static/css/images/layers.png",
+  "./static/css/images/layers-2x.png",
 
-  "/static/fonts/glyphicons-halflings-regular.eot",
-  "/static/fonts/glyphicons-halflings-regular.svg",
-  "/static/fonts/glyphicons-halflings-regular.ttf",
-  "/static/fonts/glyphicons-halflings-regular.woff",
-  "/static/fonts/glyphicons-halflings-regular.woff2",
+  "./static/css/bootstrap-slider.css",
+  "./static/css/bootstrap-toggle.min.css",
+  "./static/css/bootstrap.min.css",
+  "./static/css/leaflet.min.css",
+  "./static/css/dvf.min.css",
+  "./static/css/easy-button.css",
 
-  "/static/js/bootstrap-slider.js",
-  "/static/js/bootstrap-toggle.min.js",
-  "/static/js/bootstrap.min.js",
-  "/static/js/jquery-3.1.1.min.js",
-  "//unpkg.com/leaflet@1.0.3/dist/leaflet.js",
-  "/static/js/leaflet-dvf.js",
-  "/static/js/RFregions.js",
+  "./static/fonts/glyphicons-halflings-regular.eot",
+  "./static/fonts/glyphicons-halflings-regular.svg",
+  "./static/fonts/glyphicons-halflings-regular.ttf",
+  "./static/fonts/glyphicons-halflings-regular.woff",
+  "./static/fonts/glyphicons-halflings-regular.woff2",
+
+  "./static/js/bootstrap-slider.js",
+  "./static/js/bootstrap-toggle.min.js",
+  "./static/js/bootstrap.min.js",
+  "./static/js/jquery-3.1.1.min.js",
+  "./static/js/leaflet.min.js",
+  "./static/js/leaflet-dvf.js",
+  "./static/js/RFregions.js",
+  "./static/js/easy-button.js",
+  "./static/js/dom-to-image.min.js",
+  "./static/js/file-saver.min.js",
+  "./app.js"
 ];
 
 const OFFLINE_CACHE_FILES = [
-  "/site.webmanifest",
-  "/browserconfig.xml",
+  "./site.webmanifest",
+  "./browserconfig.xml",
 
-  "/static/img/android-chrome-192x192.png",
-  "/static/img/android-chrome-512x512.png",
-  "/static/img/apple-touch-icon.png",
-  "/static/img/favicon-16x16.png",
-  "/static/img/favicon-32x32.png",
-  "/static/img/mstile-150x150.png",
-  "/static/img/safari-pinned-tab.svg",
+  "./static/img/android-chrome-192x192.png",
+  "./static/img/android-chrome-512x512.png",
+  "./static/img/apple-touch-icon.png",
+  "./static/img/favicon-16x16.png",
+  "./static/img/favicon-32x32.png",
+  "./static/img/mstile-150x150.png",
+  "./static/img/safari-pinned-tab.svg",
+  "./app.js"
 ];
 
-const NOT_FOUND_CACHE_FILES = ["/404.html"];
+const NOT_FOUND_CACHE_FILES = ["./404.html"];
 
-const OFFLINE_PAGE = "/offline.html";
-const NOT_FOUND_PAGE = "/404.html";
+const OFFLINE_PAGE = "./offline.html";
+const NOT_FOUND_PAGE = "./404.html";
 
 const CACHE_VERSIONS = {
   assets: "assets-v" + CACHE_VERSION,
@@ -60,7 +72,7 @@ const CACHE_VERSIONS = {
 
 // Define MAX_TTL's in SECONDS for specific file extensions
 const MAX_TTL = {
-  "/": 31536000,
+  "./": 31536000,
   html: 31536000,
   json: 86400,
   js: 31536000,
@@ -104,7 +116,7 @@ function getFileExtension(url) {
     .split(".")
     .reverse()[0]
     .split("?")[0];
-  return extension.endsWith("/") ? "/" : extension;
+  return extension.endsWith("./") ? "./" : extension;
 }
 
 /**
