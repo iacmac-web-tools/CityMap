@@ -302,7 +302,7 @@
     });
 
     /*
-     * 
+     *
      */
     L.RGBBlueFunction = L.LinearFunction.extend({
 
@@ -319,7 +319,7 @@
     });
 
     /*
-     * 
+     *
      */
     L.RGBGreenFunction = L.LinearFunction.extend({
 
@@ -649,7 +649,7 @@
     L.categoryFunction = function (categoryMap, options) {
         return new L.CategoryFunction(categoryMap, options);
     };
-    
+
 }(window, document)); // indexOf doesn't work in IE 8 and below, so add this method if it doesn't exist
 // Copied from:  http://stackoverflow.com/questions/1744310/how-to-fix-array-indexof-in-javascript-for-ie-browsers
 (function (window, document, undefined) {
@@ -2697,7 +2697,7 @@
     L.regularPolygon = function (centerLatLng, options) {
         return new L.RegularPolygon(centerLatLng, options);
     };
-    
+
 }(window, document)); (function (window, document, undefined) {
 
     L.Path.XLINK_NS = 'http://www.w3.org/1999/xlink';
@@ -4468,7 +4468,7 @@
     L.markerGroup = function (latlng, markers) {
         return new L.MarkerGroup(latlng, markers);
     };
-    
+
 }(window, document)); /*
  * Class for a drawing a bar marker on the map.  This is the basis for the BarChartMarker
  */
@@ -4651,9 +4651,9 @@
 
 	            this.initialize(self._latlng, currentOptions);
 	            this.redraw();
-	            this.setStyle(currentOptions);
+	            // this.setStyle(currentOptions);
 
-	            self.addLayer(currentOptions.marker);
+	            // self.addLayer(currentOptions.marker);
 	        });
 
 	        chartElement.on('mouseout', function (e) {
@@ -4663,7 +4663,7 @@
 
 	            this.initialize(self._latlng, currentOptions);
 	            this.redraw();
-	            this.setStyle(currentOptions);
+	            // this.setStyle(currentOptions);
 
 	            self.removeLayer(currentOptions.marker);
 	        });
@@ -4711,7 +4711,7 @@
 	});
 
 	/*
-	 * 
+	 *
 	 */
 	L.BarChartMarker = L.ChartMarker.extend({
 	    initialize: function (centerLatLng, options) {
@@ -5032,7 +5032,7 @@
 	};
 
 	/*
-	 * 
+	 *
 	 */
 	L.CoxcombChartMarker = L.PieChartMarker.extend({
 	    statics: {
@@ -5139,7 +5139,7 @@
 	};
 
 	/*
-	 * 
+	 *
 	 */
 	L.RadialBarChartMarker = L.ChartMarker.extend({
 	    initialize: function (centerLatLng, options) {
@@ -5305,7 +5305,7 @@
 	});
 
 	/*
-	 * 
+	 *
 	 */
 	L.RadialMeterMarker = L.ChartMarker.extend({
 	    initialize: function (centerLatLng, options) {
@@ -7330,7 +7330,7 @@
     L.radialMeterMarkerDataLayer = function (data, options) {
         return new L.RadialMeterMarkerDataLayer(data, options);
     };
-    
+
 }(window, document)); /*
  *
  */
@@ -7918,7 +7918,7 @@
     L.arcedPolyline = function (latlngs, options) {
         return new L.ArcedPolyline(latlngs, options);
     };
-    
+
 }(window, document)); (function (window, document, undefined) {
     L.Control.Legend = L.Control.extend({
         options: {
@@ -8034,7 +8034,7 @@
  /*
  *
  */
-(function (window, document, undefined) { 
+(function (window, document, undefined) {
     L.SeriesMarker = L.Path.extend({
         initialize: function (centerLatLng, options) {
             L.setOptions(this, options);
@@ -8971,7 +8971,7 @@
     L.WeightedLineSegment.include(L.LineTextFunctions);
 
     /*
-     * 
+     *
      */
     L.WeightedFlowLine = L.FlowLine.extend({
         initialize: function (data, options) {

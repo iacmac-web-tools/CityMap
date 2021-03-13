@@ -163,6 +163,9 @@ ul {
   color: #777;
 }
 
+.data-layer-legend {
+  padding: 0px !important;
+}
 
 /* LOADING OVERLAY */
 body{

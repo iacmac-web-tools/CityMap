@@ -49,6 +49,7 @@ var colors = [
   "#666600",
   "#CCCCCC",
 ];
+var MARKER_ICON = 'marker-icon.png';
 var geo = new google.maps.Geocoder();
 var cities = [];
 var markersLayer = new L.LayerGroup();
@@ -59,7 +60,7 @@ var piechartLayer = new L.PieChartDataLayer();
 var piechartarray = [];
 var alltxt = [];
 var PieChart = false;
-var IS_GOOGLE = true;
+var IS_GOOGLE = 'google';
 var IS_SHOW_LEGEND = true; // default value showing the legend
 var geojson = new L.geoJson();
 var Legend = L.control({ position: "bottomright" });
@@ -113,9 +114,7 @@ var baseMaps = {
   "Yandex Map ENG": yandexMapEng,
   "Google Map": googleStreets,
   "Open Street Map": osmMap,
-  "Toner Map": stamMap,
-  RoadsMap: roadsMap,
-  "Esri Map": esriMap,
+  "Toner Map": stamMap
 };
 // Attach layers to map
 map.options.crs = L.CRS.EPSG3395;
@@ -143,7 +142,12 @@ map.on("baselayerchange", function (event) {
     redrawPieChart();
   }
 });
-
+var setGeocodeMode = function(val) {
+  IS_GOOGLE = val;
+}
+var setMarkerType = function(val) {
+  MARKER_ICON = val;
+}
 var showLoading = function (val) {
   if (val) {
     $("div.spanner").addClass("show");
@@ -156,7 +160,7 @@ var showLoading = function (val) {
 };
 
 var setCurrentLoading = function (msg) {
-  document.getElementById("txtLoading").innerHTML += msg;
+  document.getElementById("txtLoading").innerHTML = msg;
 };
 
 // Pin markers on map based on cities
@@ -166,6 +170,7 @@ var updateMap = function () {
 
   var bounds = [];
   clearMap();
+
   cities.forEach(function (city) {
     if (label_toggle.checked) {
 
@@ -306,10 +311,9 @@ function setExaplePie() {
   document.getElementById("txtPiechart").value =
     "Moscow\tFirst\t69\nMoscow\tSecond\t72\nSt.Petersburg\tFirst\t10\nSt.Petersburg\tSecond\t25\nSt.Petersburg\tThird\t17";
 }
-function getDatafromTxt(val, isGoogle) {
+function getDatafromTxt(val) {
   if (val != "") {
     PieChart = true;
-    IS_GOOGLE = isGoogle;
     showLoading(true);
     nextAddress = 0;
     delay = 1000;
@@ -436,19 +440,19 @@ function makePiechart() {
       options
     );
     var str =
-      "<h3>" +
+      "<h5>" +
       piechartarray[i].fullname +
-      '</h3><table class="table table-bordered"><tr style="font-weight:bold; color:white;"><th style="background-color: #337ab7">Item</th><th style="background-color: #337ab7">Count</th></tr>';
+      '</h5><table class="table table-condensed"><tr><th>Item</th><th  style="width: 64px;">Count</th></tr>';
     for (var j = 0; j < alltxt.length; j++) {
       if (piechartarray[i].Count[j] != 0) {
         str += "<tr>";
         str +=
-          '<td style="font-weight: bold; padding-top:2px;"><div class="data-layer-legend"><div class="legend-box" style="background-color:' +
+          '<td style="font-weight: bold;"><div class="data-layer-legend"><div class="legend-box" style="background-color:' +
           colors[j] +
-          ';border-color:#000000;"></div><div class="key" style="font-size: 12pt; font-family: Helvetica ; ">' +
+          ';"></div><div class="key">' +
           alltxt[j] +
           "</div></div></td>";
-        str += "<td>" + piechartarray[i].Count[j] + "</td>";
+        str += "<td  style='width: 64px;'>" + piechartarray[i].Count[j] + "</td>";
         str += "</tr>";
       }
     }
@@ -579,19 +583,19 @@ function redrawPieChart() {
       options
     );
     var str =
-      "<h3>" +
+      "<h5>" +
       piechartarray[i].fullname +
-      '</h3><table class="table table-bordered"><tr style="font-weight:bold; color:white;"><th style="background-color: #337ab7">Item</th><th style="background-color: #337ab7">Count</th></tr>';
+      '</h5><table class="table table-condensed"><tr><th>Item</th><th style="width: 64px;">Count</th></tr>';
     for (var j = 0; j < alltxt.length; j++) {
       if (piechartarray[i].Count[j] != 0) {
         str += "<tr>";
         str +=
-          '<td style="font-weight: bold; padding-top:2px;"><div class="data-layer-legend"><div class="legend-box" style="background-color:' +
+          '<td style="font-weight: bold;"><div class="data-layer-legend"><div class="legend-box" style="background-color:' +
           colors[j] +
-          ';border-color:#000000;"></div><div class="key" style="font-size: 12pt; font-family: Helvetica ; ">' +
+          ';"></div><div class="key">' +
           alltxt[j] +
           "</div></div></td>";
-        str += "<td>" + piechartarray[i].Count[j] + "</td>";
+        str += "<td  style='width: 64px;'>" + piechartarray[i].Count[j] + "</td>";
         str += "</tr>";
       }
     }
@@ -858,9 +862,8 @@ function closeModal(modal, msg) {
   $("#" + modal).modal("hide");
 }
 // ====== Geocoding ======
-function getCoordFromGoogle(val, isGoogle) {
+function getCoordFromGoogle(val) {
   if (val != "") {
-    IS_GOOGLE = isGoogle;
     PieChart = false;
     nextAddress = 0;
     delay = 1000;
@@ -898,7 +901,7 @@ function theNext() {
 }
 
 function getDataGoogle(search, next) {
-  setCurrentLoading("Loading: " + search);
+  setCurrentLoading("Loading from Google: " + search);
   geo.geocode({ address: search }, function (results, status) {
     // If that was successful
     if (status == google.maps.GeocoderStatus.OK) {
@@ -927,7 +930,7 @@ function getDataGoogle(search, next) {
 }
 
 function getDataNomnatim(search, next) {
-  setCurrentLoading("Loading: " + search);
+  setCurrentLoading("Loading from Nominatim: " + search);
   let xml = new XMLHttpRequest();
   var url =
     "https://nominatim.openstreetmap.org/search?q=" +
@@ -956,7 +959,7 @@ function getDataNomnatim(search, next) {
 }
 
 function getAddress(search, next) {
-  if (IS_GOOGLE === true) {
+  if (IS_GOOGLE === 'google') {
     getDataGoogle(search, next);
   } else {
     getDataNomnatim(search, next);

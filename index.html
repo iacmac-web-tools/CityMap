@@ -56,11 +56,12 @@
 
     <script type="text/javascript" src="./static/js/leaflet.min.js"></script>
     <script type="text/javascript" src="./static/js/leaflet-dvf.js"></script>
+    <script type="text/javascript" src="./static/js/leaflet-dvf.markers.min.js"></script>
     <script type="text/javascript" src="./static/js/easy-button.js"></script>
     <script type="text/javascript" src="./static/js/dom-to-image.min.js"></script>
     <script type="text/javascript" src="./static/js/file-saver.min.js"></script>
 
-    <title>CityMap ver.1.4</title>
+    <title>CityMap ver.1.4.1</title>
 </head>
 
 <body>
@@ -88,9 +89,9 @@
                                         <input id="label_toggle" type="checkbox" data-toggle="toggle">
                                         <label for="label_toggle" style="margin: 10px;">Marker label</label>
                                     </div>
-                                    <select class="form-control" style="margin-bottom: 10px;" id="ddlCoordType">
-                                        <option value="true">Google Map</option>
-                                        <option value="false">Nominatim</option>
+                                    <select class="form-control" style="margin-bottom: 10px;" id="ddlCoordType" onchange="setGeocodeMode(value)">
+                                        <option value="google">Google Map</option>
+                                        <option value="nominatim">Nominatim</option>
                                       </select>
                                     <textarea id="txtCities" class="form-control" type="text"
                                         placeholder="Enter cities here line by line"></textarea>
@@ -99,7 +100,7 @@
 
                                 <div class="panel-footer">
                                     <button type="button" class="btn btn-primary" id="btnGetCoordinates"
-                                        onclick="getCoordFromGoogle(document.getElementById('txtCities').value, document.getElementById('ddlCoordType').value)">Pin
+                                        onclick="getCoordFromGoogle(document.getElementById('txtCities').value)">Pin
                                         Markers</button>
                                     <button type="button" class="btn btn-default" data-toggle="modal"
                                         data-target="#citiesCoordModal">Table</button>
@@ -121,9 +122,9 @@
                                             type="text" data-slider-min="9" data-slider-max="31" data-slider-step="1"
                                             data-slider-value="31" />
                                     </div>
-                                    <select class="form-control" style="margin-bottom: 10px;" id="ddlCoordTypePie">
-                                        <option value="true">Google Map</option>
-                                        <option value="false">Nominatim</option>
+                                    <select class="form-control" style="margin-bottom: 10px;" id="ddlCoordTypePie" onchange="setGeocodeMode(value)">
+                                        <option value="google">Google Map</option>
+                                        <option value="nominatim">Nominatim</option>
                                       </select>
                                     <a style="cursor: pointer" onclick="setExaplePie()">Example</a>
                                     <textarea id="txtPiechart" class="form-control" type="text"
@@ -133,7 +134,7 @@
 
                                 <div class="panel-footer">
                                     <button type="button" class="btn btn-primary" id="btnGetCoordinatesPie"
-                                        onclick="getDatafromTxt(document.getElementById('txtPiechart').value, document.getElementById('ddlCoordTypePie').value)">PieChart</button>
+                                        onclick="getDatafromTxt(document.getElementById('txtPiechart').value)">PieChart</button>
                                     <button type="button" class="btn btn-default" data-toggle="modal"
                                         data-target="#legendModal">Legend</button>
                                     <button type="button" id="btnShowLegendOnMap" class="btn btn-default" disabled
