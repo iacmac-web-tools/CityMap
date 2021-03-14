@@ -16,6 +16,15 @@ $("#radius_slider").on("slide", function (slideEvt) {
 function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
+// Async load js from code
+jQuery.loadScript = function (url, callback) {
+  jQuery.ajax({
+    url: url,
+    dataType: "script",
+    success: callback,
+    async: true,
+  });
+};
 function getRandomColor() {
   var letters = "0123456789ABCDEF";
   var color = "#";
@@ -68,6 +77,7 @@ var Legend = L.control({ position: "bottomright" });
 var legendShape = L.control({ position: "bottomright" });
 var nodataflag = false;
 var grades = [0, 10, 20, 50, 100, 200, 500, 1000];
+var RFregionsData;
 // Links to map sources
 var yandexMap = L.tileLayer(
   "https://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU",
@@ -180,8 +190,8 @@ var updateMap = function () {
   clearMap();
 
   var redMarker = L.AwesomeMarkers.icon({
-    icon: 'coffee',
-    markerColor: 'red'
+    icon: "coffee",
+    markerColor: "red",
   });
 
   cities.forEach(function (city) {
@@ -190,7 +200,7 @@ var updateMap = function () {
       marker = L.marker([city.lat, city.lon], {
         icon: L.AwesomeMarkers.icon({
           icon: MARKER_ICON,
-          markerColor: MARKER_COLOR
+          markerColor: MARKER_COLOR,
         }),
         draggable: true,
       });
@@ -632,94 +642,101 @@ function redrawPieChart() {
   map.addLayer(piechartLayer);
 }
 function getDatafromShapeTxt(val) {
+  if (val === "") {
+    document.getElementById("messagesShape").innerHTML = "Empty string!";
+    return;
+  }
+
   geojson.clearLayers();
   nodataflag = false;
   document.getElementById("messagesShape").innerHTML = "";
-  if (val != "") {
-    showLoading(true);
-    val = val.replace(/,/g, ".");
-    var records_list = val.trim().split(/\r?\n/);
-    var parametr = records_list[0].split("*");
-    if (!parametr[1]) {
-      parametr[1] = "";
-    }
-    records_list.shift();
-    var i = 0;
-    RFregionsData.features.forEach(function (features) {
-      features.properties.custom = records_list[i];
-      if (!records_list[i]) {
-        nodataflag = true;
+
+  showLoading(true);
+
+  if (typeof RFregionsData == "undefined")
+    $.loadScript("./static/data/RFregions.js", function () {
+      val = val.replace(/,/g, ".");
+      var records_list = val.trim().split(/\r?\n/);
+      var parametr = records_list[0].split("*");
+      if (!parametr[1]) {
+        parametr[1] = "";
       }
-      i++;
-    });
-    var i = 0,
-      q = records_list.length;
-    while (i < q) {
-      if (!records_list[i]) {
-        records_list.splice(i, 1);
-        q--;
-      } else {
+      records_list.shift();
+      var i = 0;
+      RFregionsData.features.forEach(function (features) {
+        features.properties.custom = records_list[i];
+        if (!records_list[i]) {
+          nodataflag = true;
+        }
         i++;
+      });
+      var i = 0,
+        q = records_list.length;
+      while (i < q) {
+        if (!records_list[i]) {
+          records_list.splice(i, 1);
+          q--;
+        } else {
+          i++;
+        }
       }
-    }
-    var max = Math.max.apply(Math, records_list);
-    var min = Math.min.apply(Math, records_list);
-    max = Math.log(max);
-    min = Math.log(min);
-    grades[0] = min;
-    var z = (max - min) / 8;
-    for (i = 1; i < 8; i++) {
-      grades[i] = grades[i - 1] + z;
-    }
-    for (i = 0; i < 8; i++) {
-      grades[i] = Math.pow(2.71828, grades[i]);
-      grades[i] > 1
-        ? (grades[i] = Math.floor(grades[i]))
-        : (grades[i] = grades[i].toFixed(3));
-    }
-    geojson = L.geoJson(RFregionsData, {
-      style: customstyle,
-      onEachFeature: onEachFeature,
-    })
-      .bindPopup(function (layer) {
-        var str =
-          layer.feature.properties.name +
-          "<br>" +
-          parametr[0] +
-          ": " +
-          layer.feature.properties.custom +
-          " " +
-          parametr[1];
-        return str;
+      var max = Math.max.apply(Math, records_list);
+      var min = Math.min.apply(Math, records_list);
+      max = Math.log(max);
+      min = Math.log(min);
+      grades[0] = min;
+      var z = (max - min) / 8;
+      for (i = 1; i < 8; i++) {
+        grades[i] = grades[i - 1] + z;
+      }
+      for (i = 0; i < 8; i++) {
+        grades[i] = Math.pow(2.71828, grades[i]);
+        grades[i] > 1
+          ? (grades[i] = Math.floor(grades[i]))
+          : (grades[i] = grades[i].toFixed(3));
+      }
+      geojson = L.geoJson(RFregionsData, {
+        style: customstyle,
+        onEachFeature: onEachFeature,
       })
-      .addTo(map);
-    function onEachFeature(feature, layer) {
-      layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-      });
-    }
-    function resetHighlight(e) {
-      geojson.resetStyle(e.target);
-    }
-    function highlightFeature(e) {
-      var layer = e.target;
-      layer.setStyle({
-        weight: 3,
-        color: "#666",
-        dashArray: "",
-        fillOpacity: 0.7,
-      });
-      if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        layer.bringToFront();
+        .bindPopup(function (layer) {
+          var str =
+            layer.feature.properties.name +
+            "<br>" +
+            parametr[0] +
+            ": " +
+            layer.feature.properties.custom +
+            " " +
+            parametr[1];
+          return str;
+        })
+        .addTo(map);
+      function onEachFeature(feature, layer) {
+        layer.on({
+          mouseover: highlightFeature,
+          mouseout: resetHighlight,
+        });
       }
-    }
-    legendShape.addTo(map);
-    map.setView([66.73, 100.99], 3);
+      function resetHighlight(e) {
+        geojson.resetStyle(e.target);
+      }
+      function highlightFeature(e) {
+        var layer = e.target;
+        layer.setStyle({
+          weight: 3,
+          color: "#666",
+          dashArray: "",
+          fillOpacity: 0.7,
+        });
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+          layer.bringToFront();
+        }
+      }
+      legendShape.addTo(map);
+      map.setView([66.73, 100.99], 3);
+    });
     showLoading(false);
-  } else {
-    document.getElementById("messagesShape").innerHTML = "Empty string!";
-  }
+
 }
 function showDensity() {
   geojson.clearLayers();

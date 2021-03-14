@@ -39,7 +39,6 @@ const BASE_CACHE_FILES = [
   "./static/js/leaflet.min.js",
   "./static/js/leaflet-dvf.js",
   "./static/js/leaflet.awesome-markers.min.js",
-  "./static/js/RFregions.js",
   "./static/js/easy-button.js",
   "./static/js/dom-to-image.min.js",
   "./static/js/file-saver.min.js",
