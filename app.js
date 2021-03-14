@@ -653,94 +653,102 @@ function getDatafromShapeTxt(val) {
 
   showLoading(true);
 
-  if (typeof RFregionsData == "undefined")
+  if (typeof RFregionsData == "undefined") {
     $.loadScript("./static/data/RFregions.js", function () {
-      val = val.replace(/,/g, ".");
-      var records_list = val.trim().split(/\r?\n/);
-      var parametr = records_list[0].split("*");
-      if (!parametr[1]) {
-        parametr[1] = "";
-      }
-      records_list.shift();
-      var i = 0;
-      RFregionsData.features.forEach(function (features) {
-        features.properties.custom = records_list[i];
-        if (!records_list[i]) {
-          nodataflag = true;
-        }
-        i++;
-      });
-      var i = 0,
-        q = records_list.length;
-      while (i < q) {
-        if (!records_list[i]) {
-          records_list.splice(i, 1);
-          q--;
-        } else {
-          i++;
-        }
-      }
-      var max = Math.max.apply(Math, records_list);
-      var min = Math.min.apply(Math, records_list);
-      max = Math.log(max);
-      min = Math.log(min);
-      grades[0] = min;
-      var z = (max - min) / 8;
-      for (i = 1; i < 8; i++) {
-        grades[i] = grades[i - 1] + z;
-      }
-      for (i = 0; i < 8; i++) {
-        grades[i] = Math.pow(2.71828, grades[i]);
-        grades[i] > 1
-          ? (grades[i] = Math.floor(grades[i]))
-          : (grades[i] = grades[i].toFixed(3));
-      }
-      geojson = L.geoJson(RFregionsData, {
-        style: customstyle,
-        onEachFeature: onEachFeature,
-      })
-        .bindPopup(function (layer) {
-          var str =
-            layer.feature.properties.name +
-            "<br>" +
-            parametr[0] +
-            ": " +
-            layer.feature.properties.custom +
-            " " +
-            parametr[1];
-          return str;
-        })
-        .addTo(map);
-      function onEachFeature(feature, layer) {
-        layer.on({
-          mouseover: highlightFeature,
-          mouseout: resetHighlight,
-        });
-      }
-      function resetHighlight(e) {
-        geojson.resetStyle(e.target);
-      }
-      function highlightFeature(e) {
-        var layer = e.target;
-        layer.setStyle({
-          weight: 3,
-          color: "#666",
-          dashArray: "",
-          fillOpacity: 0.7,
-        });
-        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-          layer.bringToFront();
-        }
-      }
-      legendShape.addTo(map);
-      map.setView([66.73, 100.99], 3);
+      drawShapes(val);
     });
-    showLoading(false);
-
+  }
+  else {
+    drawShapes(val);
+  }
 }
+
+function drawShapes(val) {
+  val = val.replace(/,/g, ".");
+  var records_list = val.trim().split(/\r?\n/);
+  var parametr = records_list[0].split("*");
+  if (!parametr[1]) {
+    parametr[1] = "";
+  }
+  records_list.shift();
+  var i = 0;
+  RFregionsData.features.forEach(function (features) {
+    features.properties.custom = records_list[i];
+    if (!records_list[i]) {
+      nodataflag = true;
+    }
+    i++;
+  });
+  var i = 0,
+    q = records_list.length;
+  while (i < q) {
+    if (!records_list[i]) {
+      records_list.splice(i, 1);
+      q--;
+    } else {
+      i++;
+    }
+  }
+  var max = Math.max.apply(Math, records_list);
+  var min = Math.min.apply(Math, records_list);
+  max = Math.log(max);
+  min = Math.log(min);
+  grades[0] = min;
+  var z = (max - min) / 8;
+  for (i = 1; i < 8; i++) {
+    grades[i] = grades[i - 1] + z;
+  }
+  for (i = 0; i < 8; i++) {
+    grades[i] = Math.pow(2.71828, grades[i]);
+    grades[i] > 1
+      ? (grades[i] = Math.floor(grades[i]))
+      : (grades[i] = grades[i].toFixed(3));
+  }
+  geojson = L.geoJson(RFregionsData, {
+    style: customstyle,
+    onEachFeature: onEachFeature,
+  })
+    .bindPopup(function (layer) {
+      var str =
+        layer.feature.properties.name +
+        "<br>" +
+        parametr[0] +
+        ": " +
+        layer.feature.properties.custom +
+        " " +
+        parametr[1];
+      return str;
+    })
+    .addTo(map);
+  function onEachFeature(feature, layer) {
+    layer.on({
+      mouseover: highlightFeature,
+      mouseout: resetHighlight,
+    });
+  }
+  function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+  }
+  function highlightFeature(e) {
+    var layer = e.target;
+    layer.setStyle({
+      weight: 3,
+      color: "#666",
+      dashArray: "",
+      fillOpacity: 0.7,
+    });
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+      layer.bringToFront();
+    }
+  }
+  legendShape.addTo(map);
+  map.setView([66.73, 100.99], 3);
+  showLoading(false);
+}
+
 function showDensity() {
   geojson.clearLayers();
-  document.getElementById("loadShape").style.visibility = "visible";
+  showLoading(true);
   grades = [0, 10, 20, 50, 100, 200, 500, 1000];
   nodataflag = false;
 
@@ -780,22 +788,26 @@ function showDensity() {
   }
   legendShape.addTo(map);
   map.setView([66.73, 100.99], 3);
-  document.getElementById("loadShape").style.visibility = "hidden";
+  showLoading(false);
 }
 legendShape.onAdd = function (map) {
-  var div = L.DomUtil.create("div", "info legendShape");
+  var div = L.DomUtil.create("div", "info legend");
   // loop through our density intervals and generate a label with a colored square for each interval
+  var div_html = '';
   if (nodataflag) {
-    div.innerHTML = '<i style="background:#8ed2a3"></i>Нет данных<br>';
+    div_html += '<i style="background:#8ed2a3"></i>Нет данных<br>';
   }
   for (var i = 0; i < grades.length; i++) {
-    div.innerHTML +=
+    div_html +=
       '<i style="background:' +
       getColor(grades[i] + 1) +
       '"></i> ' +
       grades[i] +
-      (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
+      (grades[i + 1] ? "&ndash;" + grades[i + 1] + '<br/>' : "+");
   }
+  div.innerHTML = div_html;
+
+  console.log(div);
   return div;
 };
 function getColor(d) {
