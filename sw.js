@@ -1,4 +1,4 @@
-const CACHE_VERSION = 5;
+const CACHE_VERSION = 6;
 
 const BASE_CACHE_FILES = [
   "./site.webmanifest",
