@@ -49,7 +49,8 @@ var colors = [
   "#666600",
   "#CCCCCC",
 ];
-var MARKER_ICON = 'marker-icon.png';
+var MARKER_ICON = "default";
+var MARKER_COLOR = "blue";
 var geo = new google.maps.Geocoder();
 var cities = [];
 var markersLayer = new L.LayerGroup();
@@ -60,7 +61,7 @@ var piechartLayer = new L.PieChartDataLayer();
 var piechartarray = [];
 var alltxt = [];
 var PieChart = false;
-var IS_GOOGLE = 'google';
+var IS_GOOGLE = "google";
 var IS_SHOW_LEGEND = true; // default value showing the legend
 var geojson = new L.geoJson();
 var Legend = L.control({ position: "bottomright" });
@@ -114,16 +115,19 @@ var baseMaps = {
   "Yandex Map ENG": yandexMapEng,
   "Google Map": googleStreets,
   "Open Street Map": osmMap,
-  "Toner Map": stamMap
+  "Toner Map": stamMap,
 };
 // Attach layers to map
 map.options.crs = L.CRS.EPSG3395;
 L.control.layers(baseMaps).addTo(map);
 markersLayer.addTo(map);
 // Add print button
-L.easyButton('<span class="glyphicon glyphicon glyphicon-save" aria-hidden="true"></span>', function(btn, map){
-    printLeaflet()
-}).addTo( map );
+L.easyButton(
+  '<span class="glyphicon glyphicon glyphicon-save" aria-hidden="true"></span>',
+  function (btn, map) {
+    printLeaflet();
+  }
+).addTo(map);
 // Смена типа карты в правом верхнем углу
 map.on("baselayerchange", function (event) {
   if (event.name == "Yandex Map" || event.name == "Yandex Map ENG") {
@@ -142,12 +146,17 @@ map.on("baselayerchange", function (event) {
     redrawPieChart();
   }
 });
-var setGeocodeMode = function(val) {
+var setGeocodeMode = function (val) {
   IS_GOOGLE = val;
-}
-var setMarkerType = function(val) {
+};
+var setMarkerIcon = function (val) {
   MARKER_ICON = val;
-}
+  updateMap();
+};
+var setMarkerColor = function (val) {
+  MARKER_COLOR = val;
+  updateMap();
+};
 var showLoading = function (val) {
   if (val) {
     $("div.spanner").addClass("show");
@@ -167,27 +176,40 @@ var setCurrentLoading = function (msg) {
 var updateMap = function () {
   if (cities.length == 0) return;
 
-
   var bounds = [];
   clearMap();
 
-  cities.forEach(function (city) {
-    if (label_toggle.checked) {
+  var redMarker = L.AwesomeMarkers.icon({
+    icon: 'coffee',
+    markerColor: 'red'
+  });
 
-      markersLayer.addLayer(
-        L.marker([city.lat, city.lon])
-        .bindPopup(city.fullname)
-        .bindTooltip(city.txtName, {
-          className: "myCSSClass",
-          permanent: true,
-          direction: "bottom",
-        })
-      );
+  cities.forEach(function (city) {
+    var marker;
+    if (MARKER_ICON !== "default") {
+      marker = L.marker([city.lat, city.lon], {
+        icon: L.AwesomeMarkers.icon({
+          icon: MARKER_ICON,
+          markerColor: MARKER_COLOR
+        }),
+        draggable: true,
+      });
     } else {
-      markersLayer.addLayer(
-        L.marker([city.lat, city.lon]).bindPopup(city.fullname)
-      );
+      marker = L.marker([city.lat, city.lon]);
     }
+
+    marker.bindPopup(city.fullname);
+
+    if (label_toggle.checked) {
+      marker.bindTooltip(city.txtName, {
+        className: "myCSSClass",
+        permanent: true,
+        direction: "bottom",
+      });
+    }
+
+    markersLayer.addLayer(marker);
+
     bounds.push([city.lat, city.lon]);
   });
 
@@ -292,20 +314,19 @@ function ShowLegendOnMap() {
   }
 }
 function printLeaflet() {
-    $('.leaflet-top.leaflet-left').hide();
-    $('.leaflet-top.leaflet-right').hide();
-    showLoading(true);
-    setCurrentLoading('Creating image');
-    var el = document.getElementById('map');
-    var width = el.offsetWidth;
-    var height = el.offsetHeight;
-    domtoimage.toBlob(el, {width, height})
-    .then(function (blob) {
-        window.saveAs(blob, 'map.png');
-        $('.leaflet-top.leaflet-left').show();
-        $('.leaflet-top.leaflet-right').show();
-        showLoading(false);
-    });
+  $(".leaflet-top.leaflet-left").hide();
+  $(".leaflet-top.leaflet-right").hide();
+  showLoading(true);
+  setCurrentLoading("Creating image");
+  var el = document.getElementById("map");
+  var width = el.offsetWidth;
+  var height = el.offsetHeight;
+  domtoimage.toBlob(el, { width, height }).then(function (blob) {
+    window.saveAs(blob, "map.png");
+    $(".leaflet-top.leaflet-left").show();
+    $(".leaflet-top.leaflet-right").show();
+    showLoading(false);
+  });
 }
 function setExaplePie() {
   document.getElementById("txtPiechart").value =
@@ -452,7 +473,8 @@ function makePiechart() {
           ';"></div><div class="key">' +
           alltxt[j] +
           "</div></div></td>";
-        str += "<td  style='width: 64px;'>" + piechartarray[i].Count[j] + "</td>";
+        str +=
+          "<td  style='width: 64px;'>" + piechartarray[i].Count[j] + "</td>";
         str += "</tr>";
       }
     }
@@ -595,7 +617,8 @@ function redrawPieChart() {
           ';"></div><div class="key">' +
           alltxt[j] +
           "</div></div></td>";
-        str += "<td  style='width: 64px;'>" + piechartarray[i].Count[j] + "</td>";
+        str +=
+          "<td  style='width: 64px;'>" + piechartarray[i].Count[j] + "</td>";
         str += "</tr>";
       }
     }
@@ -959,7 +982,7 @@ function getDataNomnatim(search, next) {
 }
 
 function getAddress(search, next) {
-  if (IS_GOOGLE === 'google') {
+  if (IS_GOOGLE === "google") {
     getDataGoogle(search, next);
   } else {
     getDataNomnatim(search, next);

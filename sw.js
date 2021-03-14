@@ -24,6 +24,7 @@ const BASE_CACHE_FILES = [
   "./static/css/leaflet.min.css",
   "./static/css/dvf.min.css",
   "./static/css/easy-button.css",
+  "./static/css/leaflet.awesome-markers.css",
 
   "./static/fonts/glyphicons-halflings-regular.eot",
   "./static/fonts/glyphicons-halflings-regular.svg",
@@ -37,6 +38,7 @@ const BASE_CACHE_FILES = [
   "./static/js/jquery-3.1.1.min.js",
   "./static/js/leaflet.min.js",
   "./static/js/leaflet-dvf.js",
+  "./static/js/leaflet.awesome-markers.min.js",
   "./static/js/RFregions.js",
   "./static/js/easy-button.js",
   "./static/js/dom-to-image.min.js",

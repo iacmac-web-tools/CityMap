@@ -41,6 +41,7 @@
     <link href="./static/css/leaflet.min.css" rel="stylesheet" />
     <link href="./static/css/dvf.min.css" rel="stylesheet" />
     <link href="./static/css/easy-button.css" rel="stylesheet" />
+    <link href="./static/css/leaflet.awesome-markers.css" rel="stylesheet" />
 
     <link href="./styles.css" rel="stylesheet" />
 
@@ -58,6 +59,7 @@
     <script type="text/javascript" src="./static/js/leaflet-dvf.js"></script>
     <script type="text/javascript" src="./static/js/leaflet-dvf.markers.min.js"></script>
     <script type="text/javascript" src="./static/js/easy-button.js"></script>
+    <script type="text/javascript" src="./static/js/leaflet.awesome-markers.min.js"></script>
     <script type="text/javascript" src="./static/js/dom-to-image.min.js"></script>
     <script type="text/javascript" src="./static/js/file-saver.min.js"></script>
 
@@ -92,7 +94,47 @@
                                     <select class="form-control" style="margin-bottom: 10px;" id="ddlCoordType" onchange="setGeocodeMode(value)">
                                         <option value="google">Google Map</option>
                                         <option value="nominatim">Nominatim</option>
-                                      </select>
+                                    </select>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <select class="form-control" style="margin-bottom: 10px;" id="ddlMarkerIcon" onchange="setMarkerIcon(value)">
+                                                <option value="default">Default</option>
+                                                <option value="star">Star</option>
+                                                <option value="heart">Heart</option>
+                                                <option value="flag">Flag</option>
+                                                <option value="bookmark">Bookmark</option>
+                                                <option value="map-marker">Map Marker</option>
+                                                <option value="ok">Check</option>
+                                                <option value="remove">Cross</option>
+                                                <option value="info-sign">Info</option>
+                                                <option value="question-sign">Question</option>
+                                                <option value="exclamation-sign">Exclamation</option>
+                                                <option value="plus-sign">Plus</option>
+                                                <option value="minus-sign">Minus</option>
+                                                <option value="home">Home</option>
+                                                <option value="fire">Fire</option>
+                                                <option value="record">Record</option>
+                                                <option value="tree-conifer">Tree</option>
+                                                <option value="asterisk">Asterisk</option>
+                                                <option value="thumbs-up">Thumb up</option>
+                                                <option value="thumbs-down">Thumb down</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" style="margin-bottom: 10px;" id="ddlMarkerType" onchange="setMarkerColor(value)">
+                                                <!-- 'red', 'darkred', 'orange', 'green', 'darkgreen', 'blue', 'purple', 'darkpurple', 'cadetblue' -->
+                                                <option value="blue">Blue</option>
+                                                <option value="red">Red</option>
+                                                <option value="darkred">Darkred</option>
+                                                <option value="orange">Orange</option>
+                                                <option value="green">Green</option>
+                                                <option value="darkgreen">Darkgreen</option>
+                                                <option value="purple">Purple</option>
+                                                <option value="darkpurple">Darkpurple</option>
+                                                <option value="cadetblue">Cadetblue</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <textarea id="txtCities" class="form-control" type="text"
                                         placeholder="Enter cities here line by line"></textarea>
                                     <div id="messagesPin" style="color: red;"></div>
