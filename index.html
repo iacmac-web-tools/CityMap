@@ -62,7 +62,7 @@
     <script type="text/javascript" src="./static/js/dom-to-image.min.js"></script>
     <script type="text/javascript" src="./static/js/file-saver.min.js"></script>
 
-    <title>CityMap ver.1.4.2</title>
+    <title>CityMap ver.1.4.3</title>
 </head>
 
 <body>
@@ -187,6 +187,17 @@
                         <div class="tab-pane" id="Shape">
                             <div id="features" class="panel panel-primary">
                                 <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <a style="cursor: pointer" onclick="setExapleDensity()">Density</a>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <a style="cursor: pointer" onclick="setExaplePopulation()">Population</a>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <a style="cursor: pointer" onclick="setExapleSquare()">Square</a>
+                                        </div>
+                                    </div>
                                     <textarea id="txtShape" class="form-control" type="text" style="resize: none;"
                                         placeholder="Enter regions value here line by line"></textarea>
                                     <div id="messagesShape" style="color: red;"></div>
