@@ -60,7 +60,6 @@ var colors = [
 ];
 var MARKER_ICON = "default";
 var MARKER_COLOR = "blue";
-var geo = new google.maps.Geocoder();
 var cities = [];
 var markersLayer = new L.LayerGroup();
 var nextAddress = 0;
@@ -70,7 +69,6 @@ var piechartLayer = new L.PieChartDataLayer();
 var piechartarray = [];
 var alltxt = [];
 var PieChart = false;
-var IS_GOOGLE = "google";
 var IS_SHOW_LEGEND = true; // default value showing the legend
 var geojson = new L.geoJson();
 var Legend = L.control({ position: "bottomright" });
@@ -156,9 +154,6 @@ map.on("baselayerchange", function (event) {
     redrawPieChart();
   }
 });
-var setGeocodeMode = function (val) {
-  IS_GOOGLE = val;
-};
 var setMarkerIcon = function (val) {
   MARKER_ICON = val;
   updateMap();
@@ -669,8 +664,7 @@ function getDatafromShapeTxt(val) {
     $.loadScript("./static/data/RFregions.js", function () {
       drawShapes(val);
     });
-  }
-  else {
+  } else {
     drawShapes(val);
   }
 }
@@ -805,7 +799,7 @@ function showDensity() {
 legendShape.onAdd = function (map) {
   var div = L.DomUtil.create("div", "info legend");
   // loop through our density intervals and generate a label with a colored square for each interval
-  var div_html = '';
+  var div_html = "";
   if (nodataflag) {
     div_html += '<i style="background:#8ed2a3"></i>Нет данных<br>';
   }
@@ -815,7 +809,7 @@ legendShape.onAdd = function (map) {
       getColor(grades[i] + 1) +
       '"></i> ' +
       grades[i] +
-      (grades[i + 1] ? "&ndash;" + grades[i + 1] + '<br/>' : "+");
+      (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br/>" : "+");
   }
   div.innerHTML = div_html;
 
@@ -926,7 +920,7 @@ function closeModal(modal, msg) {
   $("#" + modal).modal("hide");
 }
 // ====== Geocoding ======
-function getCoordFromGoogle(val) {
+function getCoord(val) {
   if (val != "") {
     PieChart = false;
     nextAddress = 0;
@@ -948,7 +942,7 @@ function theNext() {
   if (nextAddress < elementsLen) {
     var elementsVal =
       PieChart === true ? elements[nextAddress].City : elements[nextAddress];
-    setTimeout('getAddress("' + elementsVal + '",theNext)', delay);
+    setTimeout('getAddress("' + elementsVal.replace(/["']/g, "") + '",theNext)', delay);
     nextAddress++;
   } else {
     // We're done. Show map bounds
@@ -964,41 +958,12 @@ function theNext() {
   }
 }
 
-function getDataGoogle(search, next) {
-  setCurrentLoading("Loading from Google: " + search);
-  geo.geocode({ address: search }, function (results, status) {
-    // If that was successful
-    if (status == google.maps.GeocoderStatus.OK) {
-      var obj = {
-        txtName: search,
-        fullname: results[0].formatted_address,
-        lat:
-          Math.round(results[0].geometry.location.lat() * 10000000) / 10000000,
-        lon:
-          Math.round(results[0].geometry.location.lng() * 10000000) / 10000000,
-      };
-      cities.push(obj);
-    }
-    // ====== Decode the error status ======
-    else {
-      // === if we were sending the requests to fast, try this one again and increase the delay
-      if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-        nextAddress--;
-        delay++;
-      } else {
-        logErr(status, search);
-      }
-    }
-    next();
-  });
-}
-
 function getDataNomnatim(search, next) {
   setCurrentLoading("Loading from Nominatim: " + search);
   let xml = new XMLHttpRequest();
   var url =
     "https://nominatim.openstreetmap.org/search?q=" +
-    search +
+    search.replace(/["']/g, "") +
     "&limit=1&format=json";
   // the function with the 3 parameters
   xml.open("GET", url, true);
@@ -1006,12 +971,21 @@ function getDataNomnatim(search, next) {
   xml.onload = function () {
     if (this.status == 200) {
       var geo = JSON.parse(this.responseText);
-      var obj = {
-        txtName: search,
-        fullname: geo[0].display_name,
-        lat: Math.round(+geo[0].lat * 10000000) / 10000000,
-        lon: Math.round(+geo[0].lon * 10000000) / 10000000,
-      };
+      if (geo.length > 0) {
+        var obj = {
+          txtName: search,
+          fullname: geo[0].display_name,
+          lat: Math.round(+geo[0].lat * 10000000) / 10000000,
+          lon: Math.round(+geo[0].lon * 10000000) / 10000000,
+        };
+      } else {
+        var obj = {
+          txtName: search,
+          fullname: 'Not found',
+          lat: 0,
+          lon: 0,
+        };
+      }
       cities.push(obj);
     } else {
       logErr(status, search);
@@ -1023,9 +997,5 @@ function getDataNomnatim(search, next) {
 }
 
 function getAddress(search, next) {
-  if (IS_GOOGLE === "google") {
-    getDataGoogle(search, next);
-  } else {
-    getDataNomnatim(search, next);
-  }
+  getDataNomnatim(search, next);
 }

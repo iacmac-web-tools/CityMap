@@ -1,4 +1,4 @@
-const CACHE_VERSION = 9;
+const CACHE_VERSION = 10;
 
 const BASE_CACHE_FILES = [
   "./site.webmanifest",
@@ -84,7 +84,7 @@ const MAX_TTL = {
 
 const CACHE_BLACKLIST = [
   str => {
-    return !str.startsWith("https://citymap.amrhub.ru") && !str.startsWith("https://maps.googleapis.com") ;
+    return !str.startsWith("https://citymap.amrhub.ru");
   }
 ];
 

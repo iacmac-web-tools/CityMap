@@ -50,10 +50,6 @@
     <script type="text/javascript" src="./static/js/bootstrap-toggle.min.js"></script>
     <script type="text/javascript" src="./static/js/bootstrap-slider.js"></script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBTRN4GRQ37Cao2qdYSkqdg_aAZZIDhMs"
-        type="text/javascript"></script>
-
-
     <script type="text/javascript" src="./static/js/leaflet.min.js"></script>
     <script type="text/javascript" src="./static/js/leaflet-dvf.js"></script>
     <script type="text/javascript" src="./static/js/leaflet-dvf.markers.min.js"></script>
@@ -62,7 +58,7 @@
     <script type="text/javascript" src="./static/js/dom-to-image.min.js"></script>
     <script type="text/javascript" src="./static/js/file-saver.min.js"></script>
 
-    <title>CityMap ver.1.5.0</title>
+    <title>CityMap ver.1.5.1</title>
 </head>
 
 <body>
@@ -90,10 +86,6 @@
                                         <input id="label_toggle" type="checkbox" data-toggle="toggle">
                                         <label for="label_toggle" style="margin: 10px;">Marker label</label>
                                     </div>
-                                    <select class="form-control" style="margin-bottom: 10px;" id="ddlCoordType" onchange="setGeocodeMode(value)">
-                                        <option value="google">Google Map</option>
-                                        <option value="nominatim">Nominatim</option>
-                                    </select>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <select class="form-control" style="margin-bottom: 10px;" id="ddlMarkerIcon" onchange="setMarkerIcon(value)">
@@ -141,7 +133,7 @@
 
                                 <div class="panel-footer">
                                     <button type="button" class="btn btn-primary" id="btnGetCoordinates"
-                                        onclick="getCoordFromGoogle(document.getElementById('txtCities').value)">Pin
+                                        onclick="getCoord(document.getElementById('txtCities').value)">Pin
                                         Markers</button>
                                     <button type="button" class="btn btn-default" data-toggle="modal"
                                         data-target="#citiesCoordModal">Table</button>
