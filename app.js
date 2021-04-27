@@ -199,7 +199,6 @@ var updateMap = function () {
     }
 
     marker.bindPopup(city.fullname);
-    console.log(document.getElementById("ddlMarkerIcon").value);
     if (label_toggle.checked) {
       var tooltipClass = document.getElementById("ddlMarkerIcon").value == "default" ? "myCSSClassDefault" : "myCSSClass";
       marker.bindTooltip(city.txtName, {
@@ -809,8 +808,6 @@ legendShape.onAdd = function (map) {
       (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br/>" : "+");
   }
   div.innerHTML = div_html;
-
-  console.log(div);
   return div;
 };
 function getColor(d) {
