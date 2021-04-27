@@ -2,6 +2,12 @@
   padding: 0px;
   font-weight: bold;
 }
+.myCSSClassDefault {
+  padding: 0px;
+  margin-left: -16px;
+  margin-top: 34px;
+  font-weight: bold;
+}
 /*#region LEFALET FULLSCREEN ENABLING */
 
 /* one selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */

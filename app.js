@@ -184,11 +184,6 @@ var updateMap = function () {
   var bounds = [];
   clearMap();
 
-  var redMarker = L.AwesomeMarkers.icon({
-    icon: "coffee",
-    markerColor: "red",
-  });
-
   cities.forEach(function (city) {
     var marker;
     if (MARKER_ICON !== "default") {
@@ -204,12 +199,14 @@ var updateMap = function () {
     }
 
     marker.bindPopup(city.fullname);
-
+    console.log(document.getElementById("ddlMarkerIcon").value);
     if (label_toggle.checked) {
+      var tooltipClass = document.getElementById("ddlMarkerIcon").value == "default" ? "myCSSClassDefault" : "myCSSClass";
       marker.bindTooltip(city.txtName, {
-        className: "myCSSClass",
+        className: tooltipClass,
         permanent: true,
         direction: "bottom",
+        // offset: Point(1, 1)
       });
     }
 
