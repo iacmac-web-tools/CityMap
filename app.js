@@ -77,30 +77,37 @@ var nodataflag = false;
 var grades = [0, 10, 20, 50, 100, 200, 500, 1000];
 var RFregionsData;
 // Links to map sources
-var yandexMap = L.tileLayer(
-  "https://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU",
-  {
-    subdomains: ["01", "02", "03", "04"],
-    reuseTiles: true,
-    updateWhenIdle: false,
-  }
-);
-var yandexMapEng = L.tileLayer(
-  "https://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=en_US",
-  {
-    subdomains: ["01", "02", "03", "04"],
-    reuseTiles: true,
-    updateWhenIdle: false,
-  }
-);
+// var yandexMap = L.tileLayer(
+//   "https://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU",
+//   {
+//     subdomains: ["01", "02", "03", "04"],
+//     reuseTiles: true,
+//     updateWhenIdle: false,
+//   }
+// );
+// var yandexMapEng = L.tileLayer(
+//   "https://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=en_US",
+//   {
+//     subdomains: ["01", "02", "03", "04"],
+//     reuseTiles: true,
+//     updateWhenIdle: false,
+//   }
+// );
 var osmMap = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
-var roadsMap = L.tileLayer(
-  "https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}"
-);
+// var roadsMap = L.tileLayer(
+//   "https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}"
+// );
 var stamMap = L.tileLayer(
   "https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}",
   { subdomains: "abcd", minZoom: 0, maxZoom: 20, ext: "png" }
 );
+var topoMap = L.tileLayer(
+  'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+  {
+    maxZoom: 17,
+    attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+  }
+)
 var esriMap = L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
 );
@@ -112,18 +119,21 @@ var googleStreets = L.tileLayer(
 var map = L.map("map", {
   center: [56.73, 36.99],
   zoom: 6,
-  layers: [yandexMap],
+  layers: [osmMap],
   fullscreenControl: true,
   fullscreenControlOptions: {
     position: "topleft",
   },
 });
 var baseMaps = {
-  "Yandex Map": yandexMap,
-  "Yandex Map ENG": yandexMapEng,
-  "Google Map": googleStreets,
   "Open Street Map": osmMap,
+  "Google Map": googleStreets,
+  // "Yandex Map": yandexMap,
+  // "Yandex Map ENG": yandexMapEng,
+  // "Road Map": roadsMap,
   "Toner Map": stamMap,
+  "Topo Map": topoMap,
+  "Esri Map": esriMap,
 };
 // Attach layers to map
 map.options.crs = L.CRS.EPSG3395;
